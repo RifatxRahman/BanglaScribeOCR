@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Project Bangla OCR — Single Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 30%, #9333ea 70%, #7e22ce 100%);
+    }
+    .drop-zone {
+      transition: all 0.3s ease;
+    }
+    .drop-zone.drag-over {
+      background-color: #f0e7ff;
+      border-color: #7e22ce;
+    }
+    .file-preview {
+      transition: all 0.3s ease;
+    }
+    .wave {
+      animation: wave 8s linear infinite;
+    }
+    @keyframes wave {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+    }
+    .toast.show {
+      transform: translateX(0);
+    }
+    .toast.success {
+      background-color: #10b981;
+    }
+    .toast.error {
+      background-color: #ef4444;
+    }
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <!-- Toast Notifications -->
+  <div id="toastSuccess" class="toast success">
+    <div class="flex items-center">
+      <i class="fas fa-check-circle mr-2"></i>
+      <span id="toastSuccessMessage">আপনার ফাইল সফলভাবে আপলোড হয়েছে! বাংলা OCR উন্নয়নে আপনার অবদানের জন্য ধন্যবাদ।</span>
+    </div>
+  </div>
+  
+  <div id="toastError" class="toast error">
+    <div class="flex items-center">
+      <i class="fas fa-exclamation-circle mr-2"></i>
+      <span id="toastErrorMessage">ত্রুটি: দয়া করে至少 একটি ছবি আপলোড করুন</span>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="gradient-bg text-white py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 left-0 right-0 whitespace-nowrap wave">
+        <span class="text-6xl inline-block mr-20">📝</span>
+        <span class="text-6xl inline-block mr-20">🔍</span>
+        <span class="text-6xl inline-block mr-20">🤖</span>
+        <span class="text-6xl inline-block mr-20">📝</span>
+        <span class="text-6xl inline-block mr-20">🔍</span>
+        <span class="text-6xl inline-block mr-20">🤖</span>
+      </div>
+    </div>
+    <div class="container mx-auto px-6 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">বাংলা হাতে লেখা OCR প্রজেক্ট</h1>
+      <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">আপনার হাতের লেখা ডেটা আপলোড করে একটি উন্নতমানের বাংলা OCR সিস্টেম তৈরিতে সাহায্য করুন। আপনার ছোট্ট অবদান বাংলা ভাষার ডিজিটাল ভবিষ্যৎ গড়তে সহায়তা করবে।</p>
+      <a href="#upload" class="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-2xl shadow-lg hover:bg-gray-100 transition inline-flex items-center">
+        শুরু করুন <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Upload Section -->
+  <section id="upload" class="py-16">
+    <div class="container mx-auto px-6 max-w-2xl">
+      <div class="bg-white rounded-2xl shadow-lg p-8 card-hover">
+        <h2 class="text-2xl font-bold mb-6 text-center text-indigo-700">আপনার হাতে লেখা ডেটা আপলোড করুন</h2>
+        
+        <form id="uploadForm" class="space-y-6">
+          <!-- New Fields -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 mb-2">লেখার ধরন (ঐচ্ছিক)</label>
+              <select id="writingStyle" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="" selected>নির্বাচন করুন</option>
+                <option value="Printed">প্রিন্টেড (Printed)</option>
+                <option value="Cursive">করসিভ (Cursive)</option>
+                <option value="Mixed">মিশ্র (Mixed)</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 mb-2">✋ কোন হাতে লেখেন? (ঐচ্ছিক)</label>
+              <select id="handPreference" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="" selected>নির্বাচন করুন</option>
+                <option value="Left">বাম হাত (Left)</option>
+                <option value="Right">ডান হাত (Right)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 mb-2">বয়সের গ্রুপ (ঐচ্ছিক)</label>
+              <select id="ageGroup" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="" selected>নির্বাচন করুন</option>
+                <option value="<12">১২ বছরের কম</option>
+                <option value="13-18">১৩-১৮ বছর</option>
+                <option value="19-24">১৯-২৪ বছর</option>
+                <option value="25-30">২৫-৩০ বছর</option>
+                <option value="31-50">৩১-৫০ বছর</option>
+                <option value="50+">৫০+ বছর</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 mb-2">লিঙ্গ (ঐচ্ছিক)</label>
+              <select id="gender" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="" selected>নির্বাচন করুন</option>
+                <option value="Male">পুরুষ</option>
+                <option value="Female">মহিলা</option>
+                <option value="Other">অন্যান্য</option>
+                <option value="Prefer not to say">উত্তর দিতে চাই না</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- File Upload -->
+          <div id="dropZone" class="drop-zone border-2 border-dashed border-indigo-300 rounded-2xl p-8 text-center hover:bg-gray-50 transition cursor-pointer">
+            <div class="mb-4 text-indigo-500">
+              <i class="fas fa-cloud-upload-alt text-4xl"></i>
+            </div>
+            <p class="mb-2 text-gray-700 font-medium">ফাইল এখানে ড্রপ করুন</p>
+            <p class="mb-4 text-gray-500 text-sm">অথবা</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+              <label class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-indigo-200 transition">
+                <i class="fas fa-camera mr-2"></i> ক্যামেরা থেকে তোলেন
+                <input type="file" accept="image/*" capture="environment" class="hidden" id="cameraInput">
+              </label>
+              
+              <label class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-indigo-200 transition">
+                <i class="fas fa-image mr-2"></i> গ্যালারি থেকে নির্বাচন করুন
+                <input type="file" accept="image/*" class="hidden" id="galleryInput" multiple>
+              </label>
+            </div>
+            
+            <p class="mt-4 text-gray-500 text-sm">সর্বোচ্চ ১০টি ছবি আপলোড করতে পারবেন (JPG, PNG)</p>
+          </div>
+
+          <!-- File Previews -->
+          <div id="filePreviews" class="hidden grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+            <!-- File previews will be added here dynamically -->
+          </div>
+
+          <!-- Progress Bar -->
+          <div id="progressContainer" class="hidden">
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+            </div>
+            <p id="progressText" class="text-right text-sm text-gray-500 mt-2">0%</p>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-2xl font-semibold hover:bg-indigo-700 transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            আপলোড করুন
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works Section -->
+  <section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center text-indigo-700 mb-12">কিভাবে কাজ করে?</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover">
+          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl text-indigo-600">1</span>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">আপলোড করুন</h3>
+          <p class="text-gray-600">আপনার বাংলা হাতের লেখার ছবি আপলোড করুন। ক্যামেরা দিয়ে সরাসরি তুলে দিতে পারেন বা গ্যালারি থেকে নির্বাচন করতে পারেন。</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover">
+          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl text-indigo-600">2</span>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">ডেটা প্রসেসিং</h3>
+          <p class="text-gray-600">আমাদের সিস্টেম আপনার ছবি বিশ্লেষণ করে এবং বাংলা টেক্সট চিনতে AI মডেলকে প্রশিক্ষণ দিতে এই ডেটা ব্যবহার করে。</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover">
+          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl text-indigo-600">3</span>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">মডেল উন্নয়ন</h3>
+          <p class="text-gray-600">আপনার অবদান বাংলা OCR মডেলকে আরও সঠিক এবং কার্যকর করতে সাহায্য করে, যা বাংলা ভাষার ডিজিটাল রূপান্তরকে ত্বরান্বিত করে।</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-16">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-3xl font-bold text-center text-indigo-700 mb-10">প্রজেক্ট সম্পর্কে</h2>
+      <p class="text-lg text-gray-700 leading-relaxed mb-6">
+        বাংলা হাতে লেখা টেক্সট শনাক্তকরণ (OCR) একটি বড় চ্যালেঞ্জ। আমাদের লক্ষ্য একটি আধুনিক ডেটাসেট তৈরি করা, যাতে ভবিষ্যতে AI মডেলগুলো আরো নির্ভুলভাবে বাংলা লেখা চিনতে পারে। আপনার অবদান এই প্রজেক্টকে সফল করতে সাহায্য করবে।
+      </p>
+      <p class="text-lg text-gray-700 leading-relaxed">
+        এই প্রজেক্টটি সম্পূর্ণ ওপেন সোর্স এবং গবেষণার উদ্দেশ্যে তৈরি। আপনার আপলোড করা সকল ডেটা পাবলিকভাবে হবে এবং শুধুমাত্র গবেষণার কাজে ব্যবহৃত হবে। আপনার গোপনীয়তা রক্ষায় আমরা সংবেদনশীল তথ্য আপলোড না করার অনুরোধ করছি।
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-3xl font-bold text-center text-indigo-700 mb-10">সচরাচর জিজ্ঞাসিত প্রশ্ন</h2>
+      
+      <div class="space-y-4">
+        <div class="bg-white rounded-2xl p-6 shadow-md card-hover">
+          <h3 class="text-xl font-semibold mb-2 text-indigo-600">কোন ধরনের ছবি আপলোড করা যাবে?</h3>
+          <p class="text-gray-700">স্পষ্ট এবং পড়া যাবে এমন বাংলা হাতের লেখার যেকোনো ছবি আপলোড করতে পারেন। JPG, PNG ফরম্যাটের ছবি নেয়া হয়।</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl p-6 shadow-md card-hover">
+          <h3 class="text-xl font-semibold mb-2 text-indigo-600">আমার ডেটা কীভাবে ব্যবহার করা হবে?</h3>
+          <p class="text-gray-700">আপনার আপলোড করা ছবিগুলো একটি পাবলিক ডেটাসেটে যুক্ত হবে এবং বাংলা OCR সিস্টেম উন্নত করতে গবেষকরা ব্যবহার করবেন。</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl p-6 shadow-md card-hover">
+          <h3 class="text-xl font-semibold mb-2 text-indigo-600">আমি কি আমার আপলোড করা ডেটা মুছে ফেলতে পারব?</h3>
+          <p class="text-gray-700">ডেটা আপলোড হয়ে গেলে এবং গবেষণায় ব্যবহার শুরু হলে তা সরিয়ে ফেলা কঠিন। তাই আপলোডের নিশ্চিত হয়ে নিন।</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-indigo-700 text-white py-10">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <h3 class="text-xl font-bold">বাংলা হাতে লেখা OCR প্রজেক্ট</h3>
+          <p class="text-indigo-200 mt-2">বাংলা ভাষার ডিজিটাল ভবিষ্যৎ গড়তে আমাদের সাথে যুক্ত হোন</p>
+        </div>
+        
+        <div class="flex space-x-4">
+          <a href="#" class="text-white hover:text-indigo-200 transition">
+            <i class="fab fa-github text-2xl"></i>
+          </a>
+          <a href="#" class="text-white hover:text-indigo-200 transition">
+            <i class="fab fa-twitter text-2xl"></i>
+          </a>
+          <a href="#" class="text-white hover:text-indigo-200 transition">
+            <i class="fab fa-facebook text-2xl"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div class="border-t border-indigo-600 mt-8 pt-8 text-center text-sm text-indigo-300">
+        <p>© ২০২৫ Project Bangla OCR. সর্বস্বত্ব সংরক্ষিত।</p>
+        <p class="mt-2">এই প্রজেক্টটি শিক্ষা ও গবেষণার উদ্দেশ্যে তৈরি</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const dropZone = document.getElementById('dropZone');
+      const cameraInput = document.getElementById('cameraInput');
+      const galleryInput = document.getElementById('galleryInput');
+      const filePreviews = document.getElementById('filePreviews');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+      const form = document.getElementById('uploadForm');
+      const toastSuccess = document.getElementById('toastSuccess');
+      const toastError = document.getElementById('toastError');
+      
+      // Handle drag and drop
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+      });
+      
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+      });
+      
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+      });
+      
+      function highlight() {
+        dropZone.classList.add('drag-over');
+      }
+      
+      function unhighlight() {
+        dropZone.classList.remove('drag-over');
+      }
+      
+      dropZone.addEventListener('drop', handleDrop, false);
+      
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+      }
+      
+      // Handle file selection from buttons
+      cameraInput.addEventListener('change', function() {
+        handleFiles(this.files);
+      });
+      
+      galleryInput.addEventListener('change', function() {
+        handleFiles(this.files);
+      });
+      
+      function handleFiles(files) {
+        if (files.length > 0) {
+          filePreviews.classList.remove('hidden');
+          
+          for (let i = 0; i < Math.min(files.length, 10); i++) {
+            const file = files[i];
+            if (file.type.match('image.*')) {
+              const reader = new FileReader();
+              
+              reader.onload = function(e) {
+                const preview = document.createElement('div');
+                preview.className = 'file-preview relative';
+                preview.innerHTML = `
+                  <img src="${e.target.result}" class="rounded-lg object-cover h-32 w-full" />
+                  <button type="button" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                    &times;
+                  </button>
+                `;
+                
+                preview.querySelector('button').addEventListener('click', function() {
+                  preview.remove();
+                  if (filePreviews.children.length === 0) {
+                    filePreviews.classList.add('hidden');
+                  }
+                });
+                
+                filePreviews.appendChild(preview);
+              }
+              
+              reader.readAsDataURL(file);
+            }
+          }
+        }
+      }
+      
+      // Show toast notification
+      function showToast(toastElement, message) {
+        if (message) {
+          toastElement.querySelector('span').textContent = message;
+        }
+        toastElement.classList.add('show');
+        setTimeout(() => {
+          toastElement.classList.remove('show');
+        }, 5000);
+      }
+      
+      // Form validation
+      function validateForm() {
+        const fileCount = filePreviews.children.length;
+        if (fileCount === 0) {
+          showToast(toastError, 'ত্রুটি: দয়া করে একটি ছবি আপলোড করুন');
+          return false;
+        }
+        
+        if (fileCount > 10) {
+          showToast(toastError, 'ত্রুটি: আপনি 10টি ছবি আপলোড করতে পারেন');
+          return false;
+        }
+        
+        return true;
+      }
+      
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!validateForm()) {
+          return;
+        }
+        
+        // Collect form data
+        const formData = {
+          writingStyle: document.getElementById('writingStyle').value,
+          handPreference: document.getElementById('handPreference').value,
+          ageGroup: document.getElementById('ageGroup').value,
+          gender: document.getElementById('gender').value,
+          files: filePreviews.children.length
+        };
+        
+        console.log('Form data:', formData);
+        
+        // Simulate upload progress
+        progressContainer.classList.remove('hidden');
+        let width = 0;
+        const interval = setInterval(function() {
+          if (width >= 100) {
+            clearInterval(interval);
+            
+            // Redirect to thank you page with data as URL parameters
+            const params = new URLSearchParams();
+            params.append('files', formData.files);
+            if (formData.writingStyle) params.append('writingStyle', formData.writingStyle);
+            if (formData.handPreference) params.append('handPreference', formData.handPreference);
+            if (formData.ageGroup) params.append('ageGroup', formData.ageGroup);
+            if (formData.gender) params.append('gender', formData.gender);
+            
+            window.location.href = 'thankyou.html?' + params.toString();
+          } else {
+            width += 5;
+            progressBar.style.width = width + '%';
+            progressText.textContent = width + '%';
+          }
+        }, 200);
+      });
+    });
+  </script>
+
+</body>
+</html>
