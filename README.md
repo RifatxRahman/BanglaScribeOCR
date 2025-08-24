@@ -90,9 +90,11 @@ https://via.placeholder.com/800x400?text=Project+Bangla+OCR+Screenshot
 
 সেটআপ স্টেপস
 
-    রিপোজিটরি ক্লোন করুন:
+রিপোজিটরি ক্লোন করুন:
 
-bash
+
+   bash
+
 
 git clone https://github.com/RifatxRahman/BanglaScribeOCR.git
 cd bangla-ocr-project
