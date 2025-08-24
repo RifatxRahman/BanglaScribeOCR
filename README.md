@@ -96,17 +96,23 @@ https://via.placeholder.com/800x400?text=Project+Bangla+OCR+Screenshot
  <br>
 
     git clone https://github.com/RifatxRahman/BanglaScribeOCR.git
+
+<br>
+
     cd bangla-ocr-project
 
 packages ইনস্টল করুন:
 
     bash
+<br>
 
     npm install
 
 environment variables সেটআপ করুন:
 
     bash
+
+<br>
 
     cp .env.example .env
 
@@ -115,10 +121,15 @@ environment variables সেটআপ করুন:
 সার্ভার চালু করুন:
 
     bash 
+<br>
 
     npm start
 
-    ব্রাউজারে খুলুন: http://localhost:3000
+
+
+ব্রাউজারে খুলুন: 
+
+    http://localhost:3000
 
 <br>
 
@@ -128,6 +139,8 @@ environment variables সেটআপ করুন:
      
      
      bash
+
+<br>
 
      npm run dev
 
@@ -145,19 +158,19 @@ environment variables সেটআপ করুন:
 
 ব্যাকএন্ড
 
-    Node.js - সার্ভার-সাইড রানটাইম
+Node.js - সার্ভার-সাইড রানটাইম
 
-    Express.js - ওয়েব ফ্রেমওয়ার্ক
+Express.js - ওয়েব ফ্রেমওয়ার্ক
 
-    Multer - ফাইল আপলোড হ্যান্ডলিং
+Multer - ফাইল আপলোড হ্যান্ডলিং
 
-    MongoDB/Mongoose - ডেটাবেস (ঐচ্ছিক)
+MongoDB/Mongoose - ডেটাবেস (ঐচ্ছিক)
 
 ডেপ্লয়মেন্ট
 
-    Heroku/Netlify - ক্লাউড হোস্টিং
+Heroku/Netlify - ক্লাউড হোস্টিং
 
-    GitHub Actions - CI/CD (ভবিষ্যত পরিকল্পনা)
+GitHub Actions - CI/CD (ভবিষ্যত পরিকল্পনা)
 
 <br>
 
