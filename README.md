@@ -4,7 +4,7 @@ Project Bangla OCR - বাংলা হাতে লেখা OCR
 
 https://img.shields.io/badge/Project-Bangla%2520OCR-blue
 https://img.shields.io/badge/Status-Development-yellow
-https://img.shields.io/badge/Contributions-Welcome-brightgreen
+https://img.shields.io/badge/Contributions-Welcome-brightgreen <br>
 📋 বিষয়বস্তু
 
     প্রকল্প সম্পর্কে
