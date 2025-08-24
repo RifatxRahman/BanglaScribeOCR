@@ -93,7 +93,7 @@ https://via.placeholder.com/800x400?text=Project+Bangla+OCR+Screenshot
 
   
     bash
- 
+ <br>
 
     git clone https://github.com/RifatxRahman/BanglaScribeOCR.git
     cd bangla-ocr-project
