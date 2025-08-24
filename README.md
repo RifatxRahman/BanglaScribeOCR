@@ -1,3 +1,4 @@
+<img width="1536" height="1024" alt="ChatGPT Image Aug 24, 2025, 11_24_40 AM" src="https://github.com/user-attachments/assets/2614565f-2fc8-4618-a464-e4929ad979b2" />
 
 <b>Project Bangla OCR - বাংলা হাতে লেখা OCR</b>
 
