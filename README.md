@@ -95,8 +95,8 @@ https://via.placeholder.com/800x400?text=Project+Bangla+OCR+Screenshot
     bash
  
 
-git clone https://github.com/RifatxRahman/BanglaScribeOCR.git
-cd bangla-ocr-project
+    git clone https://github.com/RifatxRahman/BanglaScribeOCR.git
+    cd bangla-ocr-project
 
 packages ইনস্টল করুন:
 
