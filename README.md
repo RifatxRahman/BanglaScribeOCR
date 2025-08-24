@@ -1,6 +1,6 @@
 
                                                                      
-                                                    Project Bangla OCR - বাংলা হাতে লেখা OCR
+                      Project Bangla OCR - বাংলা হাতে লেখা OCR
 
 এটি একটি ওপেন সোর্স প্রজেক্ট যার লক্ষ্য বাংলা হাতের লেখা শনাক্তকরণ (OCR) সিস্টেমের উন্নতি করা। এই প্রজেক্টটি একটি পাবলিক ডেটাসেট তৈরি করতে ব্যবহারকারীদের কাছ থেকে বাংলা হাতের লেখার নমুনা সংগ্রহ করে।
 
@@ -53,7 +53,7 @@ https://via.placeholder.com/800x400?text=Project+Bangla+OCR+Screenshot
 
     আমাদের ওয়েবসাইটে গিয়ে আপনার বাংলা হাতের লেখার ছবি আপলোড করুন
 
-    https://your-deployment-url.com (ডেপ্লয় লিংক যুক্ত করুন)
+    https://rifatxrahman.github.io/BanglaScribeOCR/ (ডেপ্লয় লিংক যুক্ত করুন)
 
 2. কোড contribute করুন
 
