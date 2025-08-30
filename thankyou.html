@@ -4,88 +4,381 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>ধন্যবাদ - Project Bangla OCR</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" as="style">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+  
+  <!-- DNS prefetch for faster external resource loading -->
+  <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+  
+  <!-- Preconnect to establish early connections -->
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
+    /* Critical CSS inlined for faster rendering */
+    :root {
+      --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 30%, #9333ea 70%, #7e22ce 100%);
+      --primary-color: #4f46e5;
+      --secondary-color: #7e22ce;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
     body {
       font-family: 'Hind Siliguri', sans-serif;
       background: linear-gradient(to bottom, #f9fafb, #e5e7eb);
       min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+    
+    /* Hardware acceleration for smoother animations */
+    .gpu-accelerated {
+      transform: translateZ(0);
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+    
     .gradient-bg {
-      background: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 30%, #9333ea 70%, #7e22ce 100%);
+      background: var(--primary-gradient);
+      position: relative;
+      overflow: hidden;
     }
+    
+    /* Optimized confetti animation */
     .confetti {
       position: absolute;
       width: 12px;
       height: 12px;
       opacity: 0.7;
       border-radius: 50%;
+      will-change: transform;
     }
+    
     @keyframes fall {
       0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.7; }
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
+    
+    /* Optimized floating animation */
     .floating {
       animation: float 6s ease-in-out infinite;
+      will-change: transform;
     }
+    
     @keyframes float {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-15px); }
       100% { transform: translateY(0px); }
     }
+    
+    /* Optimized card hover effects */
     .card-hover {
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateZ(0);
     }
+    
     .card-hover:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px) translateZ(0);
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* Touch-optimized buttons */
+    .touch-button {
+      min-height: 48px;
+      min-width: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+    
+    /* Optimized stats counter */
+    .stats-counter {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Optimized contribution badge */
+    .contribution-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      margin-top: 1rem;
+      box-shadow: 0 4px 6px rgba(139, 92, 246, 0.2);
+    }
+    
+    /* Optimized share buttons */
+    .share-btn {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateZ(0);
+    }
+    
+    .share-btn:hover {
+      transform: translateY(-3px) translateZ(0);
+    }
+    
+    .social-count {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
+    
+    /* Accessibility focus styles */
+    button:focus, 
+    input:focus, 
+    select:focus, 
+    textarea:focus,
+    a:focus {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+    
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .gradient-bg {
+        background: #000;
+      }
+      .bg-indigo-600, .bg-gradient-to-r {
+        background: #000 !important;
+        border: 2px solid #fff;
+      }
+      .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+        color: #fff !important;
+      }
+      .bg-white {
+        background: #000 !important;
+        color: #fff !important;
+        border: 1px solid #fff;
+      }
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .floating, .confetti {
+        animation: none;
+      }
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 640px) {
+      .mobile-stack {
+        flex-direction: column;
+      }
+      .mobile-stack > * {
+        margin-bottom: 0.5rem;
+      }
+      .mobile-stack > *:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    /* Smooth scrolling for anchor links */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Optimize performance for animations */
+    .optimized-animation {
+      transform: translateZ(0);
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+    }
+    
+    /* Pulse animation */
+    .pulse {
+      animation: pulse 2s infinite;
+      will-change: transform;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    /* Progress bar animation */
+    .progress-bar {
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Toast notification styles */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateX(150%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+    }
+    
+    .toast.success { background-color: var(--success-color); }
+    .toast.error { background-color: var(--error-color); }
+    
+    /* Mobile touch optimizations */
+    @media (hover: none) {
+      .card-hover:active {
+        transform: scale(0.98);
+      }
+      
+      .unified-button:active {
+        transform: scale(0.95);
+      }
+    }
+    
+    /* Unified button styling */
+    .unified-button {
+      background: linear-gradient(to right, #4f46e5, #7e22ce);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3), 0 2px 4px -1px rgba(79, 70, 229, 0.2);
+    }
+    
+    .unified-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4), 0 4px 6px -2px rgba(79, 70, 229, 0.2);
+    }
+    
+    .unified-button:active {
+      transform: scale(0.95);
+    }
+    
+    .unified-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Loading spinner */
+    .loader {
+      border-top-color: #8b5cf6;
+      animation: spin 1s linear infinite;
+      will-change: transform;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body class="text-gray-900">
-
+  <!-- Skip to main content link for screen readers -->
+  <a href="#main-content" class="sr-only focus:not-sr-only fixed top-0 left-0 bg-indigo-700 text-white p-2 z-50">সামগ্রিক বিষয়বস্তুতে যান</a>
+  
+  <!-- Toast Notifications -->
+  <div id="toastSuccess" class="toast success" role="alert" aria-live="assertive">
+    <div class="flex items-center">
+      <i class="fas fa-check-circle mr-2" aria-hidden="true"></i>
+      <span id="toastSuccessMessage">অপারেশন সফল হয়েছে!</span>
+    </div>
+  </div>
+  
+  <div id="toastError" class="toast error" role="alert" aria-live="assertive">
+    <div class="flex items-center">
+      <i class="fas fa-exclamation-circle mr-2" aria-hidden="true"></i>
+      <span id="toastErrorMessage">ত্রুটি ঘটেছে, আবার চেষ্টা করুন</span>
+    </div>
+  </div>
+  
   <!-- Confetti Animation -->
-  <div id="confetti-container" class="fixed inset-0 pointer-events-none z-50 overflow-hidden"></div>
-
+  <div id="confetti-container" class="fixed inset-0 pointer-events-none z-50 overflow-hidden" aria-hidden="true"></div>
+  
   <!-- Header -->
-  <header class="gradient-bg text-white py-6 shadow-lg">
+  <header class="gradient-bg text-white py-6 shadow-lg optimized-animation" role="banner">
     <div class="container mx-auto px-6 flex justify-between items-center">
       <h1 class="text-2xl font-bold">বাংলা হাতে লেখা OCR প্রজেক্ট</h1>
-      <a href="index.html" class="text-white hover:text-indigo-200 transition bg-indigo-800 bg-opacity-30 p-2 rounded-lg">
-        <i class="fas fa-home text-xl"></i>
+      <a href="index.html" class="text-white hover:text-indigo-200 transition bg-indigo-800 bg-opacity-30 p-3 rounded-lg touch-button optimized-animation" aria-label="হোমপেজে ফিরে যান">
+        <i class="fas fa-home text-xl" aria-hidden="true"></i>
       </a>
     </div>
   </header>
-
+  
   <!-- Thank You Content -->
-  <main class="py-12">
+  <main id="main-content" class="py-12" role="main">
     <div class="container mx-auto px-6 max-w-4xl">
-      <div class="text-center mb-12 floating">
-        <div class="w-32 h-32 bg-gradient-to-r from-green-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-          <i class="fas fa-check-circle text-6xl text-green-500"></i>
+      <div class="text-center mb-12 floating optimized-animation">
+        <div class="w-32 h-32 bg-gradient-to-r from-green-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg pulse optimized-animation">
+          <i class="fas fa-check-circle text-6xl text-green-500" aria-hidden="true"></i>
         </div>
         <h2 class="text-4xl md:text-5xl font-bold text-indigo-700 mb-4">আপনার অবদানের জন্য ধন্যবাদ!</h2>
         <p class="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
           আপনার আপলোড করা হাতে লেখা ডেটা বাংলা OCR সিস্টেম উন্নত করতে গুরুত্বপূর্ণ ভূমিকা পালন করবে। আপনার মতো অবদানকারীদের সহায়তায় আমরা বাংলা ভাষার ডিজিটাল ভবিষ্যৎ গড়ে তুলতে পারব।
         </p>
+        
+        <!-- Share buttons -->
+        <div class="flex justify-center mt-8 space-x-4">
+          <button class="share-btn bg-blue-600 text-white p-3 rounded-full touch-button optimized-animation" aria-label="ফেসবুকে শেয়ার করুন">
+            <i class="fab fa-facebook-f"></i>
+          </button>
+          <button class="share-btn bg-blue-400 text-white p-3 rounded-full touch-button optimized-animation" aria-label="টুইটারে শেয়ার করুন">
+            <i class="fab fa-twitter"></i>
+          </button>
+          <button class="share-btn bg-red-600 text-white p-3 rounded-full touch-button optimized-animation" aria-label="ইমেইলের মাধ্যমে শেয়ার করুন">
+            <i class="fas fa-envelope"></i>
+          </button>
+          <button class="share-btn bg-green-500 text-white p-3 rounded-full touch-button optimized-animation" aria-label="হোয়াটসঅ্যাপে শেয়ার করুন">
+            <i class="fab fa-whatsapp"></i>
+          </button>
+        </div>
+        <p class="social-count" id="share-count">১৩২ জন এই প্রজেক্টটি শেয়ার করেছেন</p>
       </div>
-
-      <div class="bg-white rounded-2xl shadow-xl p-8 mb-10 card-hover border border-indigo-100">
+      
+      <div class="bg-white rounded-2xl shadow-xl p-8 mb-10 card-hover border border-indigo-100 optimized-animation">
         <h3 class="text-2xl font-bold text-center text-indigo-700 mb-6 pb-3 border-b border-indigo-100">আপনার অবদান সম্পর্কে তথ্য</h3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-xl shadow-sm border border-indigo-100">
+          <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-xl shadow-sm border border-indigo-100 optimized-animation">
             <p class="text-sm text-indigo-700 mb-1 flex items-center">
-              <i class="fas fa-file-image mr-2"></i> আপলোড করা ফাইল
+              <i class="fas fa-file-image mr-2" aria-hidden="true"></i> আপলোড করা ফাইল
             </p>
-            <p class="text-2xl font-semibold text-indigo-900" id="uploaded-count">5টি</p>
+            <p class="stats-counter" id="uploaded-count">5টি</p>
           </div>
           
-          <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-xl shadow-sm border border-indigo-100">
+          <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-xl shadow-sm border border-indigo-100 optimized-animation">
             <p class="text-sm text-indigo-700 mb-1 flex items-center">
-              <i class="far fa-clock mr-2"></i> আপলোডের সময়
+              <i class="far fa-clock mr-2" aria-hidden="true"></i> আপলোডের সময়
             </p>
             <p class="text-2xl font-semibold text-indigo-900" id="upload-time">২৫ আগস্ট, ২০২৫ - ০৩:৪৫ PM</p>
           </div>
@@ -93,8 +386,11 @@
         
         <div class="text-center mt-8 pt-5 border-t border-indigo-100">
           <p class="text-gray-700 mb-4">আপনার অবদানের জন্য একটি স্বীকৃতি আইডি:</p>
-          <div class="bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-xl inline-block border border-indigo-200 shadow-sm">
+          <div class="bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-xl inline-block border border-indigo-200 shadow-sm optimized-animation">
             <code class="text-indigo-700 font-mono text-lg font-bold" id="contribution-id">BN-OCR-82917543</code>
+          </div>
+          <div class="contribution-badge optimized-animation">
+            <i class="fas fa-trophy mr-2"></i> বাংলা OCR চ্যাম্পিয়ন
           </div>
           <p class="text-sm text-gray-500 mt-3">এই আইডি দিয়ে আপনি পরবর্তীতে আপনার অবদান ট্র্যাক করতে পারবেন</p>
         </div>
@@ -102,76 +398,76 @@
         <!-- Additional Info Section (will be populated by JavaScript) -->
         <div id="additional-info"></div>
       </div>
-
+      
       <!-- Call to Action Buttons -->
-      <div class="flex flex-col sm:flex-row justify-center gap-5 mb-16">
-        <a href="index.html#upload" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center justify-center text-lg transform hover:-translate-y-1">
-          <i class="fas fa-cloud-upload-alt mr-3"></i> আরও ডেটা আপলোড করুন
+      <div class="flex flex-col sm:flex-row justify-center gap-5 mb-16 mobile-stack">
+        <a href="index.html#upload" class="unified-button touch-button optimized-animation">
+          <i class="fas fa-cloud-upload-alt mr-3" aria-hidden="true"></i> আরও ডেটা আপলোড করুন
         </a>
-        <a href="index.html" class="bg-white text-indigo-700 font-semibold px-8 py-4 rounded-2xl shadow-lg border border-indigo-200 hover:bg-indigo-50 transition-all flex items-center justify-center text-lg transform hover:-translate-y-1">
-          <i class="fas fa-home mr-3"></i> হোমপেজে ফিরে যান
+        <a href="index.html" class="bg-white text-indigo-700 font-semibold px-8 py-4 rounded-2xl shadow-lg border border-indigo-200 hover:bg-indigo-50 transition-all flex items-center justify-center text-lg transform hover:-translate-y-1 focus:ring-4 focus:ring-indigo-300 touch-button optimized-animation">
+          <i class="fas fa-home mr-3" aria-hidden="true"></i> হোমপেজে ফিরে যান
         </a>
       </div>
-
+      
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div class="bg-white rounded-2xl shadow-lg p-6 card-hover border border-indigo-100">
+        <div class="bg-white rounded-2xl shadow-lg p-6 card-hover border border-indigo-100 optimized-animation">
           <h3 class="text-xl font-bold text-indigo-700 mb-4 flex items-center">
-            <i class="fas fa-list-check mr-3 text-indigo-500"></i> পরবর্তী কী হবে?
+            <i class="fas fa-list-check mr-3 text-indigo-500" aria-hidden="true"></i> পরবর্তী কী হবে?
           </h3>
           <ul class="space-y-4">
             <li class="flex items-start">
-              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                <i class="fas fa-check text-green-600"></i>
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3 optimized-animation">
+                <i class="fas fa-check text-green-600" aria-hidden="true"></i>
               </div>
               <span class="text-gray-700">আপনার ডেটা আমাদের নিরাপদ সার্ভারে সংরক্ষণ করা হয়েছে</span>
             </li>
             <li class="flex items-start">
-              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                <i class="fas fa-check text-green-600"></i>
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3 optimized-animation">
+                <i class="fas fa-check text-green-600" aria-hidden="true"></i>
               </div>
               <span class="text-gray-700">আমাদের গবেষণা দল ডেটা প্রিপ্রসেসিং করবে</span>
             </li>
             <li class="flex items-start">
-              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                <i class="fas fa-check text-green-600"></i>
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3 optimized-animation">
+                <i class="fas fa-check text-green-600" aria-hidden="true"></i>
               </div>
               <span class="text-gray-700">ডেটা AI মডেল ট্রেনিং-এ ব্যবহার করা হবে</span>
             </li>
             <li class="flex items-start">
-              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                <i class="fas fa-check text-green-600"></i>
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3 optimized-animation">
+                <i class="fas fa-check text-green-600" aria-hidden="true"></i>
               </div>
               <span class="text-gray-700">মডেলের উন্নতি সম্পর্কে আপডেট পেতে আমাদের নিউজলেটারে সাবস্ক্রাইব করুন</span>
             </li>
           </ul>
         </div>
         
-        <div class="bg-white rounded-2xl shadow-lg p-6 card-hover border border-indigo-100">
+        <div class="bg-white rounded-2xl shadow-lg p-6 card-hover border border-indigo-100 optimized-animation">
           <h3 class="text-xl font-bold text-indigo-700 mb-4 flex items-center">
-            <i class="fas fa-lightbulb mr-3 text-yellow-500"></i> আপনি আরও কী করতে পারেন?
+            <i class="fas fa-lightbulb mr-3 text-yellow-500" aria-hidden="true"></i> আপনি আরও কী করতে পারেন?
           </h3>
           <ul class="space-y-4">
             <li class="flex items-start">
-              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                <i class="fas fa-share-alt text-indigo-600"></i>
+              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3 optimized-animation">
+                <i class="fas fa-share-alt text-indigo-600" aria-hidden="true"></i>
               </div>
               <span class="text-gray-700">প্রজেক্টটি আপনার বন্ধুদের সাথে শেয়ার করুন</span>
             </li>
             <li class="flex items-start">
-              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                <i class="fas fa-download text-indigo-600"></i>
+              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3 optimized-animation">
+                <i class="fas fa-download text-indigo-600" aria-hidden="true"></i>
               </div>
               <span class="text-gray-700">আমাদের মোবাইল অ্যাপ ডাউনলোড করুন</span>
             </li>
             <li class="flex items-start">
-              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                <i class="fas fa-envelope text-indigo-600"></i>
+              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3 optimized-animation">
+                <i class="fas fa-envelope text-indigo-600" aria-hidden="true"></i>
               </div>
               <span class="text-gray-700">আমাদের গবেষণা দলে যোগদান করুন</span>
             </li>
             <li class="flex items-start">
-              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                <i class="fas fa-hand-holding-heart text-indigo-600"></i>
+              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mr-3 optimized-animation">
+                <i class="fas fa-hand-holding-heart text-indigo-600" aria-hidden="true"></i>
               </div>
               <span class="text-gray-700">প্রজেক্টটি ডোনেট করে সহায়তা করুন</span>
             </li>
@@ -180,53 +476,71 @@
       </div>
     </div>
   </main>
-
+  
   <!-- Progress Section -->
-  <section class="py-16 bg-gradient-to-b from-white to-gray-100">
+  <section class="py-16 bg-gradient-to-b from-white to-gray-100 optimized-animation" aria-labelledby="progress-heading">
     <div class="container mx-auto px-6 max-w-4xl">
-      <h2 class="text-3xl font-bold text-center text-indigo-700 mb-12">সামগ্রিক প্রজেক্ট অগ্রগতি</h2>
+      <h2 id="progress-heading" class="text-3xl font-bold text-center text-indigo-700 mb-12">সামগ্রিক প্রজেক্ট অগ্রগতি</h2>
       
-      <div class="bg-white rounded-2xl shadow-xl p-6 mb-10 card-hover border border-indigo-100">
+      <div class="bg-white rounded-2xl shadow-xl p-6 mb-10 card-hover border border-indigo-100 optimized-animation">
         <div class="flex justify-between items-center mb-3">
           <span class="text-gray-700 font-medium flex items-center">
-            <i class="fas fa-bullseye mr-2 text-indigo-600"></i> ডেটা সংগ্রহ লক্ষ্যমাত্রা
+            <i class="fas fa-bullseye mr-2 text-indigo-600" aria-hidden="true"></i> ডেটা সংগ্রহ লক্ষ্যমাত্রা
           </span>
           <span class="text-indigo-700 font-semibold text-lg">৭৮%</span>
         </div>
         <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
-          <div class="bg-gradient-to-r from-indigo-600 to-purple-600 h-4 rounded-full" style="width: 78%"></div>
+          <div class="bg-gradient-to-r from-indigo-600 to-purple-600 h-4 rounded-full progress-bar" style="width: 78%" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <p class="text-right text-sm text-gray-500">১০,০০০ এর মধ্যে ৭,৮০০টি নমুনা সংগ্রহ করা হয়েছে</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-        <div class="bg-white p-5 rounded-2xl shadow-md card-hover border border-indigo-100">
-          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="fas fa-users text-2xl text-indigo-600"></i>
+        <div class="bg-white p-5 rounded-2xl shadow-md card-hover border border-indigo-100 optimized-animation">
+          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 optimized-animation">
+            <i class="fas fa-users text-2xl text-indigo-600" aria-hidden="true"></i>
           </div>
-          <p class="text-3xl font-bold text-indigo-700">২,৪৫৬</p>
+          <p class="stats-counter" id="contributor-count">২,৪৫৬</p>
           <p class="text-gray-600">সক্রিয় অবদানকারী</p>
         </div>
-        <div class="bg-white p-5 rounded-2xl shadow-md card-hover border border-indigo-100">
-          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="far fa-calendar-check text-2xl text-indigo-600"></i>
+        <div class="bg-white p-5 rounded-2xl shadow-md card-hover border border-indigo-100 optimized-animation">
+          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 optimized-animation">
+            <i class="far fa-calendar-check text-2xl text-indigo-600" aria-hidden="true"></i>
           </div>
-          <p class="text-3xl font-bold text-indigo-700">৪৩</p>
+          <p class="stats-counter" id="days-left">৪৩</p>
           <p class="text-gray-600">দিন বাকি</p>
         </div>
-        <div class="bg-white p-5 rounded-2xl shadow-md card-hover border border-indigo-100">
-          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="fas fa-chart-line text-2xl text-indigo-600"></i>
+        <div class="bg-white p-5 rounded-2xl shadow-md card-hover border border-indigo-100 optimized-animation">
+          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 optimized-animation">
+            <i class="fas fa-chart-line text-2xl text-indigo-600" aria-hidden="true"></i>
           </div>
-          <p class="text-3xl font-bold text-indigo-700">৯২%</p>
+          <p class="stats-counter" id="accuracy-rate">৯২%</p>
           <p class="text-gray-600">মডেলের নির্ভুলতা</p>
         </div>
       </div>
     </div>
   </section>
-
+  
+  <!-- Newsletter Subscription -->
+  <section class="py-16 bg-gradient-to-r from-indigo-50 to-purple-50 optimized-animation" aria-labelledby="newsletter-heading">
+    <div class="container mx-auto px-6 max-w-3xl text-center">
+      <h2 id="newsletter-heading" class="text-3xl font-bold text-indigo-700 mb-4">আপডেট পেতে সাবস্ক্রাইব করুন</h2>
+      <p class="text-gray-700 mb-8">আমাদের গবেষণার অগ্রগতি এবং নতুন সুযোগ সম্পর্কে জানতে আপনার ইমেইল ঠিকানা রেজিস্টার করুন</p>
+      
+      <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 justify-center">
+        <input type="email" placeholder="আপনার ইমেইল ঠিকানা" class="px-5 py-3 rounded-xl border border-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent flex-grow max-w-md touch-button optimized-animation" required aria-required="true">
+        <button type="submit" class="unified-button touch-button optimized-animation">
+          সাবস্ক্রাইব করুন
+        </button>
+      </form>
+      
+      <p class="text-sm text-gray-500 mt-4">আমরা আপনার তথ্য কখনো শেয়ার করব না। আপনি যে কোনো সময় আনসাবস্ক্রাইব করতে পারবেন</p>
+      <div id="newsletter-message" class="mt-4 hidden"></div>
+    </div>
+  </section>
+  
   <!-- Footer -->
-  <footer class="bg-indigo-800 text-white py-12">
+  <footer class="bg-indigo-800 text-white py-12 optimized-animation" role="contentinfo">
     <div class="container mx-auto px-6">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-6 md:mb-0 text-center md:text-left">
@@ -235,14 +549,14 @@
         </div>
         
         <div class="flex space-x-5">
-          <a href="#" class="text-white hover:text-indigo-200 transition bg-indigo-700 bg-opacity-50 p-3 rounded-full">
-            <i class="fab fa-github text-xl"></i>
+          <a href="#" class="text-white hover:text-indigo-200 transition bg-indigo-700 bg-opacity-50 p-3 rounded-full touch-button optimized-animation" aria-label="GitHub">
+            <i class="fab fa-github text-xl" aria-hidden="true"></i>
           </a>
-          <a href="#" class="text-white hover:text-indigo-200 transition bg-indigo-700 bg-opacity-50 p-3 rounded-full">
-            <i class="fab fa-twitter text-xl"></i>
+          <a href="#" class="text-white hover:text-indigo-200 transition bg-indigo-700 bg-opacity-50 p-3 rounded-full touch-button optimized-animation" aria-label="Twitter">
+            <i class="fab fa-twitter text-xl" aria-hidden="true"></i>
           </a>
-          <a href="#" class="text-white hover:text-indigo-200 transition bg-indigo-700 bg-opacity-50 p-3 rounded-full">
-            <i class="fab fa-facebook text-xl"></i>
+          <a href="#" class="text-white hover:text-indigo-200 transition bg-indigo-700 bg-opacity-50 p-3 rounded-full touch-button optimized-animation" aria-label="Facebook">
+            <i class="fab fa-facebook text-xl" aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -253,7 +567,7 @@
       </div>
     </div>
   </footer>
-
+  
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Get URL parameters
@@ -263,9 +577,11 @@
       const handPreference = urlParams.get('handPreference');
       const ageGroup = urlParams.get('ageGroup');
       const gender = urlParams.get('gender');
+      const textContent = urlParams.get('text');
       
-      // Set uploaded file count
-      document.getElementById('uploaded-count').textContent = `${uploadedCount}টি`;
+      // Set uploaded file count with animation
+      const uploadedCountElement = document.getElementById('uploaded-count');
+      animateCounter(uploadedCountElement, parseInt(uploadedCount), 1000, 'টি');
       
       // Set current time
       const now = new Date();
@@ -274,79 +590,264 @@
       document.getElementById('upload-time').textContent = `${now.toLocaleDateString('bn-BD', options)} - ${timeString}`;
       
       // Generate random contribution ID
-      document.getElementById('contribution-id').textContent = 'BN-OCR-' + Math.floor(10000000 + Math.random() * 90000000);
+      const contributionId = 'BN-OCR-' + Math.floor(10000000 + Math.random() * 90000000);
+      document.getElementById('contribution-id').textContent = contributionId;
+      
+      // Save contribution to localStorage
+      const contribution = {
+        id: contributionId,
+        date: now.toISOString(),
+        fileCount: parseInt(uploadedCount),
+        writingStyle: writingStyle || null,
+        handPreference: handPreference || null,
+        ageGroup: ageGroup || null,
+        gender: gender || null,
+        text: textContent || null
+      };
+      
+      let contributions = JSON.parse(localStorage.getItem('ocrContributions') || '[]');
+      contributions.push(contribution);
+      localStorage.setItem('ocrContributions', JSON.stringify(contributions));
       
       // Show additional info if available
-      if (writingStyle || handPreference || ageGroup || gender) {
+      if (writingStyle || handPreference || ageGroup || gender || textContent) {
         let additionalInfo = '';
         
-        if (writingStyle) {
-          let styleText = writingStyle;
-          if (writingStyle === 'Printed') styleText = 'প্রিন্টেড (Printed)';
-          else if (writingStyle === 'Cursive') styleText = 'করসিভ (Cursive)';
-          else if (writingStyle === 'Mixed') styleText = 'মিশ্র (Mixed)';
-          additionalInfo += `<div class="flex mb-2"><span class="font-medium w-32">লেখার ধরন:</span> <span>${styleText}</span></div>`;
+        if (textContent) {
+          additionalInfo += `<div class="bg-indigo-50 p-5 rounded-xl mb-4 border border-indigo-200 optimized-animation">
+            <p class="text-lg font-semibold text-indigo-700 mb-2 flex items-center">
+              <i class="fas fa-font mr-2"></i> লিখিত বাক্য
+            </p>
+            <p class="text-indigo-900 bg-white p-3 rounded-lg border border-indigo-100">${decodeURIComponent(textContent)}</p>
+          </div>`;
         }
         
-        if (handPreference) {
-          let handText = handPreference;
-          if (handPreference === 'Left') handText = 'বাম হাত (Left)';
-          else if (handPreference === 'Right') handText = 'ডান হাত (Right)';
-          additionalInfo += `<div class="flex mb-2"><span class="font-medium w-32">হাতের পছন্দ:</span> <span>${handText}</span></div>`;
-        }
-        
-        if (ageGroup) {
-          let ageText = ageGroup;
-          if (ageGroup === '<12') ageText = '১২ বছরের কম';
-          else if (ageGroup === '13-18') ageText = '১৩-১৮ বছর';
-          else if (ageGroup === '19-24') ageText = '১৯-২৪ বছর';
-          else if (ageGroup === '25-30') ageText = '২৫-৩০ বছর';
-          else if (ageGroup === '31-50') ageText = '৩১-৫০ বছর';
-          else if (ageGroup === '50+') ageText = '৫০+ বছর';
-          additionalInfo += `<div class="flex mb-2"><span class="font-medium w-32">বয়সের গ্রুপ:</span> <span>${ageText}</span></div>`;
-        }
-        
-        if (gender) {
-          let genderText = gender;
-          if (gender === 'Male') genderText = 'পুরুষ';
-          else if (gender === 'Female') genderText = 'মহিলা';
-          else if (gender === 'Other') genderText = 'অন্যান্য';
-          else if (gender === 'Prefer not to say') genderText = 'উত্তর দিতে চাই না';
-          additionalInfo += `<div class="flex"><span class="font-medium w-32">লিঙ্গ:</span> <span>${genderText}</span></div>`;
+        if (writingStyle || handPreference || ageGroup || gender) {
+          additionalInfo += `<p class="text-lg font-semibold text-indigo-700 mb-3 flex items-center">
+            <i class="fas fa-info-circle mr-2"></i> অতিরিক্ত তথ্য
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+          
+          if (writingStyle) {
+            let styleText = writingStyle;
+            if (writingStyle === 'Printed') styleText = 'প্রিন্টেড (Printed)';
+            else if (writingStyle === 'Cursive') styleText = 'করসিভ (Cursive)';
+            else if (writingStyle === 'Mixed') styleText = 'মিশ্র (Mixed)';
+            additionalInfo += `<div class="flex flex-col"><span class="font-medium text-indigo-700">লেখার ধরন:</span> <span class="text-indigo-900">${styleText}</span></div>`;
+          }
+          
+          if (handPreference) {
+            let handText = handPreference;
+            if (handPreference === 'Left') handText = 'বাম হাত (Left)';
+            else if (handPreference === 'Right') handText = 'ডান হাত (Right)';
+            additionalInfo += `<div class="flex flex-col"><span class="font-medium text-indigo-700">হাতের পছন্দ:</span> <span class="text-indigo-900">${handText}</span></div>`;
+          }
+          
+          if (ageGroup) {
+            let ageText = ageGroup;
+            if (ageGroup === '<12') ageText = '১২ বছরের কম';
+            else if (ageGroup === '13-18') ageText = '১৩-১৮ বছর';
+            else if (ageGroup === '19-24') ageText = '১৯-২৪ বছর';
+            else if (ageGroup === '25-30') ageText = '২৫-৩০ বছর';
+            else if (ageGroup === '31-50') ageText = '৩১-৫০ বছর';
+            else if (ageGroup === '50+') ageText = '৫০+ বছর';
+            additionalInfo += `<div class="flex flex-col"><span class="font-medium text-indigo-700">বয়সের গ্রুপ:</span> <span class="text-indigo-900">${ageText}</span></div>`;
+          }
+          
+          if (gender) {
+            let genderText = gender;
+            if (gender === 'Male') genderText = 'পুরুষ';
+            else if (gender === 'Female') genderText = 'মহিলা';
+            else if (gender === 'Other') genderText = 'অন্যান্য';
+            else if (gender === 'Prefer not to say') genderText = 'উত্তর দিতে চাই না';
+            additionalInfo += `<div class="flex flex-col"><span class="font-medium text-indigo-700">লিঙ্গ:</span> <span class="text-indigo-900">${genderText}</span></div>`;
+          }
+          
+          additionalInfo += `</div>`;
         }
         
         if (additionalInfo) {
           const infoDiv = document.createElement('div');
-          infoDiv.className = 'bg-indigo-50 p-5 rounded-xl mt-6 border border-indigo-200';
-          infoDiv.innerHTML = `
-            <p class="text-lg font-semibold text-indigo-700 mb-3 flex items-center">
-              <i class="fas fa-info-circle mr-2"></i> অতিরিক্ত তথ্য
-            </p>
-            <div class="text-indigo-900">${additionalInfo}</div>
-          `;
+          infoDiv.className = 'bg-indigo-50 p-5 rounded-xl mt-6 border border-indigo-200 optimized-animation';
+          infoDiv.innerHTML = additionalInfo;
           document.getElementById('additional-info').appendChild(infoDiv);
         }
       }
       
-      // Show confetti animation
-      const confettiContainer = document.getElementById('confetti-container');
+      // Show confetti animation (only if reduced motion is not preferred)
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        createConfetti();
+      }
       
-      for (let i = 0; i < 120; i++) {
+      // Animate stats counters
+      animateCounter(document.getElementById('contributor-count'), 2456, 2000);
+      animateCounter(document.getElementById('days-left'), 43, 1000);
+      animateCounter(document.getElementById('accuracy-rate'), 92, 1500, '%');
+      
+      // Newsletter form handling
+      const newsletterForm = document.getElementById('newsletter-form');
+      const newsletterMessage = document.getElementById('newsletter-message');
+      
+      newsletterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const emailInput = this.querySelector('input[type="email"]');
+        const email = emailInput.value.trim();
+        
+        if (!isValidEmail(email)) {
+          showNewsletterMessage('দয়া করে একটি বৈধ ইমেইল ঠিকানা লিখুন', 'error');
+          return;
+        }
+        
+        // Simulate subscription
+        showNewsletterMessage('সাবস্ক্রিপশন সফল হয়েছে! ধন্যবাদ।', 'success');
+        
+        // Save subscription to localStorage
+        let subscriptions = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
+        subscriptions.push({
+          email: email,
+          date: new Date().toISOString()
+        });
+        localStorage.setItem('newsletterSubscriptions', JSON.stringify(subscriptions));
+        
+        // Reset form
+        emailInput.value = '';
+      });
+      
+      // Share buttons functionality
+      document.querySelectorAll('.share-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const platform = this.querySelector('i').classList[1];
+          let shareUrl = '';
+          
+          switch(platform) {
+            case 'fa-facebook-f':
+              shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+              break;
+            case 'fa-twitter':
+              shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent('আমি বাংলা OCR প্রজেক্টে অবদান রেখেছি! আপনিও যোগ দিন: ' + window.location.href)}`;
+              break;
+            case 'fa-envelope':
+              shareUrl = `mailto:?subject=বাংলা OCR প্রজেক্ট&body=আমি বাংলা OCR প্রজেক্টে অবদান রেখেছি! আপনিও যোগ দিন: ${encodeURIComponent(window.location.href)}`;
+              break;
+            case 'fa-whatsapp':
+              shareUrl = `https://wa.me/?text=${encodeURIComponent('আমি বাংলা OCR প্রজেক্টে অবদান রেখেছি! আপনিও যোগ দিন: ' + window.location.href)}`;
+              break;
+          }
+          
+          window.open(shareUrl, '_blank');
+          
+          // Update share count
+          const shareCount = document.getElementById('share-count');
+          if (shareCount) {
+            const currentCount = parseInt(shareCount.textContent.match(/\d+/)[0]);
+            shareCount.textContent = `${currentCount + 1} জন এই প্রজেক্টটি শেয়ার করেছেন`;
+          }
+        });
+      });
+    });
+    
+    // Create confetti animation with performance optimizations
+    function createConfetti() {
+      const confettiContainer = document.getElementById('confetti-container');
+      if (!confettiContainer) return;
+      
+      const confettiCount = 50; // Reduced for better performance
+      const colors = ['#f0e7ff', '#c7d2fe', '#ddd6fe', '#a5b4fc', '#8b5cf6', '#c4b5fd', '#a78bfa', '#fbcfe8'];
+      
+      // Use document fragment for better performance
+      const fragment = document.createDocumentFragment();
+      
+      for (let i = 0; i < confettiCount; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.left = Math.random() * 100 + 'vw';
         confetti.style.animation = `fall ${Math.random() * 5 + 5}s linear forwards`;
         confetti.style.animationDelay = Math.random() * 3 + 's';
-        confetti.style.backgroundColor = getRandomColor();
-        confettiContainer.appendChild(confetti);
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        fragment.appendChild(confetti);
       }
       
-      function getRandomColor() {
-        const colors = ['#f0e7ff', '#c7d2fe', '#ddd6fe', '#a5b4fc', '#8b5cf6', '#c4b5fd', '#a78bfa', '#fbcfe8'];
-        return colors[Math.floor(Math.random() * colors.length)];
+      // Append all confetti at once
+      confettiContainer.appendChild(fragment);
+      
+      // Clean up confetti after animation
+      setTimeout(() => {
+        confettiContainer.innerHTML = '';
+      }, 8000);
+    }
+    
+    // Animate counter with performance optimizations
+    function animateCounter(element, target, duration, suffix = '') {
+      const start = 0;
+      const increment = target / (duration / 16);
+      let current = start;
+      
+      // Use requestAnimationFrame for smoother animation
+      let startTime = null;
+      
+      function updateCounter(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Use easing function for smoother animation
+        const easeOutQuad = 1 - Math.pow(1 - progress, 2);
+        current = Math.floor(start + (target - start) * easeOutQuad);
+        
+        element.textContent = current.toLocaleString('bn-BD') + suffix;
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateCounter);
+        }
       }
-    });
+      
+      requestAnimationFrame(updateCounter);
+    }
+    
+    // Validate email
+    function isValidEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+    
+    // Show newsletter message
+    function showNewsletterMessage(message, type) {
+      const newsletterMessage = document.getElementById('newsletter-message');
+      if (!newsletterMessage) return;
+      
+      newsletterMessage.textContent = message;
+      newsletterMessage.className = 'mt-4 p-3 rounded-lg ' + 
+        (type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
+      newsletterMessage.classList.remove('hidden');
+      
+      setTimeout(() => {
+        newsletterMessage.classList.add('hidden');
+      }, 5000);
+    }
+    
+    // Show toast notification
+    function showToast(type, message) {
+      let toastElement;
+      
+      switch(type) {
+        case 'success':
+          toastElement = document.getElementById('toastSuccess');
+          document.getElementById('toastSuccessMessage').textContent = message;
+          break;
+        case 'error':
+          toastElement = document.getElementById('toastError');
+          document.getElementById('toastErrorMessage').textContent = message;
+          break;
+      }
+      
+      toastElement.classList.add('show');
+      
+      // Hide after 5 seconds
+      setTimeout(() => {
+        toastElement.classList.remove('show');
+      }, 5000);
+    }
   </script>
-
 </body>
 </html>
