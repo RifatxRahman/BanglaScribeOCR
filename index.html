@@ -3,34 +3,119 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Project Bangla OCR — Single Page</title>
+  <title>Project Bangla OCR — Complete Experience</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" as="style">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+  
+  <!-- DNS prefetch for faster external resource loading -->
+  <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+  
+  <!-- Preconnect to establish early connections -->
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
+    /* Critical CSS inlined for faster rendering */
+    :root {
+      --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 30%, #9333ea 70%, #7e22ce 100%);
+      --primary-color: #4f46e5;
+      --secondary-color: #7e22ce;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
     body {
       font-family: 'Hind Siliguri', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+    
+    /* Hardware acceleration for smoother animations */
+    .gpu-accelerated {
+      transform: translateZ(0);
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+    
+    /* Optimized gradient background */
     .gradient-bg {
-      background: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 30%, #9333ea 70%, #7e22ce 100%);
+      background: var(--primary-gradient);
+      position: relative;
+      overflow: hidden;
     }
-    .drop-zone {
-      transition: all 0.3s ease;
-    }
-    .drop-zone.drag-over {
-      background-color: #f0e7ff;
-      border-color: #7e22ce;
-    }
-    .file-preview {
-      transition: all 0.3s ease;
-    }
+    
+    /* Optimized wave animation using transform */
     .wave {
-      animation: wave 8s linear infinite;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 100%;
+      display: flex;
+      animation: wave 15s linear infinite;
+      will-change: transform;
     }
+    
     @keyframes wave {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
     }
+    
+    /* Optimized file preview transitions */
+    .file-preview {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      transform: translateZ(0);
+    }
+    
+    .file-preview img {
+      width: 100%;
+      height: 128px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+    
+    /* Processing indicator */
+    .processing-indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      z-index: 10;
+    }
+    
+    .processing-spinner {
+      border: 3px solid rgba(79, 70, 229, 0.2);
+      border-radius: 50%;
+      border-top: 3px solid #4f46e5;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+    
+    /* Optimized toast notifications */
     .toast {
       position: fixed;
       top: 20px;
@@ -41,241 +126,645 @@
       z-index: 1000;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       transform: translateX(150%);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
     }
+    
     .toast.show {
       transform: translateX(0);
     }
-    .toast.success {
-      background-color: #10b981;
-    }
-    .toast.error {
-      background-color: #ef4444;
-    }
+    
+    .toast.success { background-color: var(--success-color); }
+    .toast.error { background-color: var(--error-color); }
+    .toast.warning { background-color: var(--warning-color); }
+    
+    /* Optimized card hover effects */
     .card-hover {
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateZ(0);
     }
+    
     .card-hover:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px) translateZ(0);
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* Accessibility focus styles */
+    button:focus, 
+    input:focus, 
+    select:focus, 
+    textarea:focus,
+    label:focus-within {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+    
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .gradient-bg { background: #000; }
+      .bg-indigo-600 { 
+        background-color: #000; 
+        border: 2px solid #fff; 
+      }
+      .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+        color: #fff;
+      }
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .wave { animation: none; }
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 640px) {
+      .mobile-stack {
+        flex-direction: column;
+      }
+      .mobile-stack > * {
+        margin-bottom: 0.5rem;
+      }
+      .mobile-stack > *:last-child {
+        margin-bottom: 0;
+      }
+      .text-to-write {
+        font-size: 1.5rem;
+      }
+    }
+    
+    /* Custom scrollbar for file previews */
+    .file-previews-container {
+      max-height: 400px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #c4b5fd #f1f1f1;
+    }
+    
+    .file-previews-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .file-previews-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .file-previews-container::-webkit-scrollbar-thumb {
+      background: #c4b5fd;
+      border-radius: 10px;
+    }
+    
+    .file-previews-container::-webkit-scrollbar-thumb:hover {
+      background: #8b5cf6;
+    }
+    
+    /* Loading animation */
+    .loader {
+      border-top-color: #8b5cf6;
+      animation: spin 1s linear infinite;
+      will-change: transform;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* New styles for improved UX */
+    .input-error {
+      border-color: var(--error-color);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+    
+    .error-message {
+      color: var(--error-color);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .error-message i {
+      margin-right: 0.25rem;
+    }
+    
+    .touch-button {
+      min-height: 48px;
+      min-width: 48px;
+      padding: 12px;
+      touch-action: manipulation;
+    }
+    
+    .smooth-transition {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .lazy-load {
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .lazy-load.loaded {
+      opacity: 1;
+    }
+    
+    .hint-bubble {
+      position: absolute;
+      background: var(--primary-color);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+    
+    .hint-bubble.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .hint-bubble:after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid var(--primary-color);
+    }
+    
+    /* Smooth scrolling for anchor links */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Optimize images for faster loading */
+    img {
+      content-visibility: auto;
+      contain-intrinsic-size: 300px;
+    }
+    
+    /* Optimize performance for animations */
+    .optimized-animation {
+      transform: translateZ(0);
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+    }
+    
+    /* Unified section styling */
+    .unified-section {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .unified-section-title {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #4f46e5;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+    
+    .unified-section-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, #4f46e5, #7e22ce);
+      border-radius: 2px;
+    }
+    
+    .unified-section-description {
+      font-size: 1.125rem;
+      color: #4b5563;
+      text-align: center;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+    
+    .unified-content-box {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      margin-bottom: 1.5rem;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .unified-button {
+      background: linear-gradient(to right, #4f46e5, #7e22ce);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3), 0 2px 4px -1px rgba(79, 70, 229, 0.2);
+    }
+    
+    .unified-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4), 0 4px 6px -2px rgba(79, 70, 229, 0.2);
+    }
+    
+    .unified-button:active {
+      transform: scale(0.95);
+    }
+    
+    .unified-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .unified-dropzone {
+      border: 2px dashed #c7d2fe;
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+    
+    .unified-dropzone:hover {
+      border-color: #818cf8;
+      background: #f0f4ff;
+    }
+    
+    .unified-dropzone.drag-over {
+      border-color: #4f46e5;
+      background: #eef2ff;
+    }
+    
+    /* Mobile touch optimizations */
+    @media (hover: none) {
+      .card-hover:active {
+        transform: scale(0.98);
+      }
+      
+      .unified-button:active {
+        transform: scale(0.95);
+      }
+    }
+    
+    /* Custom checkbox styling */
+    input[type="checkbox"]:checked {
+      background-color: #4f46e5;
+      border-color: #4f46e5;
+    }
+
+    input[type="checkbox"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+
+    /* Smooth transitions for all interactive elements */
+    .transition-all {
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 300ms;
+    }
+
+    /* Hover effect for consent section */
+    .bg-indigo-50:hover {
+      background-color: #eef2ff;
     }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
-
+  <!-- Skip to main content link for screen readers -->
+  <a href="#main-content" class="sr-only focus:not-sr-only fixed top-0 left-0 bg-indigo-700 text-white p-2 z-50">সামগ্রিক বিষয়বস্তুতে যান</a>
+  
   <!-- Toast Notifications -->
-  <div id="toastSuccess" class="toast success">
+  <div id="toastSuccess" class="toast success" role="alert" aria-live="assertive">
     <div class="flex items-center">
-      <i class="fas fa-check-circle mr-2"></i>
+      <i class="fas fa-check-circle mr-2" aria-hidden="true"></i>
       <span id="toastSuccessMessage">আপনার ফাইল সফলভাবে আপলোড হয়েছে! বাংলা OCR উন্নয়নে আপনার অবদানের জন্য ধন্যবাদ।</span>
     </div>
   </div>
   
-  <div id="toastError" class="toast error">
+  <div id="toastError" class="toast error" role="alert" aria-live="assertive">
     <div class="flex items-center">
-      <i class="fas fa-exclamation-circle mr-2"></i>
-      <span id="toastErrorMessage">ত্রুটি: দয়া করে至少 একটি ছবি আপলোড করুন</span>
+      <i class="fas fa-exclamation-circle mr-2" aria-hidden="true"></i>
+      <span id="toastErrorMessage">ত্রুটি: দয়া করে কমপক্ষে একটি ছবি আপলোড করুন</span>
     </div>
   </div>
-
-  <!-- Hero Section -->
-  <section class="gradient-bg text-white py-20 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-      <div class="absolute top-0 left-0 right-0 whitespace-nowrap wave">
-        <span class="text-6xl inline-block mr-20">📝</span>
-        <span class="text-6xl inline-block mr-20">🔍</span>
-        <span class="text-6xl inline-block mr-20">🤖</span>
-        <span class="text-6xl inline-block mr-20">📝</span>
-        <span class="text-6xl inline-block mr-20">🔍</span>
-        <span class="text-6xl inline-block mr-20">🤖</span>
+  
+  <div id="toastWarning" class="toast warning" role="alert" aria-live="assertive">
+    <div class="flex items-center">
+      <i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i>
+      <span id="toastWarningMessage">সতর্কতা: কিছু সমস্যা হয়েছে</span>
+    </div>
+  </div>
+  
+  <!-- Header -->
+  <header role="banner" class="optimized-animation">
+    <section class="gradient-bg text-white py-20 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10">
+        <div class="wave">
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">📝</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">🔍</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">🤖</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">📝</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">🔍</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">🤖</span>
+          <!-- Duplicate for seamless loop -->
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">📝</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">🔍</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">🤖</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">📝</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">🔍</span>
+          <span class="text-6xl inline-block mr-20" aria-hidden="true">🤖</span>
+        </div>
       </div>
-    </div>
-    <div class="container mx-auto px-6 text-center relative z-10">
-      <h1 class="text-4xl md:text-5xl font-bold mb-6">বাংলা হাতে লেখা OCR প্রজেক্ট</h1>
-      <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">আপনার হাতের লেখা ডেটা আপলোড করে একটি উন্নতমানের বাংলা OCR সিস্টেম তৈরিতে সাহায্য করুন। আপনার ছোট্ট অবদান বাংলা ভাষার ডিজিটাল ভবিষ্যৎ গড়তে সহায়তা করবে।</p>
-      <a href="#upload" class="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-2xl shadow-lg hover:bg-gray-100 transition inline-flex items-center">
-        শুরু করুন <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-        </svg>
-      </a>
-    </div>
-  </section>
-
-  <!-- Upload Section -->
-  <section id="upload" class="py-16">
-    <div class="container mx-auto px-6 max-w-2xl">
-      <div class="bg-white rounded-2xl shadow-lg p-8 card-hover">
-        <h2 class="text-2xl font-bold mb-6 text-center text-indigo-700">আপনার হাতে লেখা ডেটা আপলোড করুন</h2>
-        
-        <form id="uploadForm" class="space-y-6">
-          <!-- New Fields -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-gray-700 mb-2">লেখার ধরন (ঐচ্ছিক)</label>
-              <select id="writingStyle" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option value="" selected>নির্বাচন করুন</option>
-                <option value="Printed">প্রিন্টেড (Printed)</option>
-                <option value="Cursive">করসিভ (Cursive)</option>
-                <option value="Mixed">মিশ্র (Mixed)</option>
-              </select>
+      <div class="container mx-auto px-6 text-center relative z-10">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 optimized-animation">বাংলা হাতে লেখা OCR প্রজেক্ট</h1>
+        <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto optimized-animation">আপনার হাতের লেখা ডেটা আপলোড করে একটি উন্নতমানের বাংলা OCR সিস্টেম তৈরিতে সাহায্য করুন। আপনার ছোট্ট অবদান বাংলা ভাষার ডিজিটাল ভবিষ্যৎ গড়তে সহায়তা করবে।</p>
+        <a href="#labeling" class="unified-button optimized-animation">
+          শুরু করুন <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+    </section>
+  </header>
+  
+  <main id="main-content" role="main">
+    <!-- ডেটা লেবেলিং সহায়তা section with unified design -->
+    <section id="labeling" class="py-16">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <div class="unified-section optimized-animation">
+          <h2 class="unified-section-title">ডেটা লেবেলিং সহায়তা</h2>
+          <p class="unified-section-description">
+            নিচের বাংলা বাক্যটি পড়ুন এবং আপনার হাতের লেখায় লিখে তার ছবি আপলোড করুন। এটি আমাদের AI মডেলকে বাংলা হাতের লেখা চিনতে সাহায্য করবে।
+          </p>
+          
+          <div class="unified-content-box">
+            <div id="textHint" class="hint-bubble">আপনি চাইলে নতুন বাক্যের জন্য রিফ্রেশ বাটন টিপুন</div>
+            <h3 class="text-xl font-semibold text-indigo-800 mb-4 text-center">লিখুন এই বাক্যটি:</h3>
+            <div id="textToWrite" class="text-2xl md:text-3xl font-bold text-indigo-900 p-4 bg-indigo-50 rounded-xl mb-4 text-center text-to-write optimized-animation" aria-live="polite">
+              বাংলা ভাষা বিশ্বের অন্যতম সুন্দর একটি ভাষা।
             </div>
-            
-            <div>
-              <label class="block text-gray-700 mb-2">✋ কোন হাতে লেখেন? (ঐচ্ছিক)</label>
-              <select id="handPreference" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option value="" selected>নির্বাচন করুন</option>
-                <option value="Left">বাম হাত (Left)</option>
-                <option value="Right">ডান হাত (Right)</option>
-              </select>
+            <div class="text-center">
+              <button id="generateNewText" class="unified-button optimized-animation" aria-label="নতুন বাক্য তৈরি করুন">
+                <i class="fas fa-sync-alt mr-2" aria-hidden="true"></i> নতুন বাক্য তৈরি করুন
+              </button>
             </div>
           </div>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-gray-700 mb-2">বয়সের গ্রুপ (ঐচ্ছিক)</label>
-              <select id="ageGroup" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option value="" selected>নির্বাচন করুন</option>
-                <option value="<12">১২ বছরের কম</option>
-                <option value="13-18">১৩-১৮ বছর</option>
-                <option value="19-24">১৯-২৪ বছর</option>
-                <option value="25-30">২৫-৩০ বছর</option>
-                <option value="31-50">৩১-৫০ বছর</option>
-                <option value="50+">৫০+ বছর</option>
-              </select>
-            </div>
-            
-            <div>
-              <label class="block text-gray-700 mb-2">লিঙ্গ (ঐচ্ছিক)</label>
-              <select id="gender" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option value="" selected>নির্বাচন করুন</option>
-                <option value="Male">পুরুষ</option>
-                <option value="Female">মহিলা</option>
-                <option value="Other">অন্যান্য</option>
-                <option value="Prefer not to say">উত্তর দিতে চাই না</option>
-              </select>
+          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 optimized-animation">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-lightbulb text-yellow-400" aria-hidden="true"></i>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-yellow-700">
+                  <strong>পরামর্শ:</strong> পরিষ্কারভাবে এবং স্বাভাবিকভাবে লিখুন, যেমন আপনি সাধারণত লিখেন। ভালো আলোয় ছবি তুলুন এবং লেখাটি যেন স্পষ্ট দেখা যায়।
+                </p>
+              </div>
             </div>
           </div>
-
-          <!-- File Upload -->
-          <div id="dropZone" class="drop-zone border-2 border-dashed border-indigo-300 rounded-2xl p-8 text-center hover:bg-gray-50 transition cursor-pointer">
-            <div class="mb-4 text-indigo-500">
-              <i class="fas fa-cloud-upload-alt text-4xl"></i>
-            </div>
-            <p class="mb-2 text-gray-700 font-medium">ফাইল এখানে ড্রপ করুন</p>
-            <p class="mb-4 text-gray-500 text-sm">অথবা</p>
-            
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-              <label class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-indigo-200 transition">
-                <i class="fas fa-camera mr-2"></i> ক্যামেরা থেকে তোলেন
-                <input type="file" accept="image/*" capture="environment" class="hidden" id="cameraInput">
-              </label>
+          
+          <div class="text-center">
+            <a href="#upload" class="unified-button optimized-animation">
+              <i class="fas fa-pencil-alt mr-2" aria-hidden="true"></i> এখনই লিখে আপলোড করুন
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- আপনার হাতে লেখা ডেটা আপলোড করুন section with unified design -->
+    <section id="upload" class="py-16 bg-gradient-to-r from-indigo-50 to-purple-50">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <div class="unified-section optimized-animation">
+          <h2 class="unified-section-title">আপনার হাতে লেখা ডেটা আপলোড করুন</h2>
+          
+          <form id="uploadForm" class="space-y-6" aria-labelledby="uploadFormTitle">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="writingStyle" class="block text-gray-700 mb-2">✍️লেখার ধরন (ঐচ্ছিক)</label>
+                <select id="writingStyle" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 optimized-animation">
+                  <option value="" selected>নির্বাচন করুন</option>
+                  <option value="Printed">প্রিন্টেড (Printed)</option>
+                  <option value="Cursive">করসিভ (Cursive)</option>
+                  <option value="Mixed">মিশ্র (Mixed)</option>
+                </select>
+              </div>
               
-              <label class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-indigo-200 transition">
-                <i class="fas fa-image mr-2"></i> গ্যালারি থেকে নির্বাচন করুন
-                <input type="file" accept="image/*" class="hidden" id="galleryInput" multiple>
-              </label>
+              <div>
+                <label for="handPreference" class="block text-gray-700 mb-2">✋ কোন হাতে লেখেন? (ঐচ্ছিক)</label>
+                <select id="handPreference" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 optimized-animation">
+                  <option value="" selected>নির্বাচন করুন</option>
+                  <option value="Left">বাম হাত (Left)</option>
+                  <option value="Right">ডান হাত (Right)</option>
+                </select>
+              </div>
             </div>
             
-            <p class="mt-4 text-gray-500 text-sm">সর্বোচ্চ ১০টি ছবি আপলোড করতে পারবেন (JPG, PNG)</p>
-          </div>
-
-          <!-- File Previews -->
-          <div id="filePreviews" class="hidden grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-            <!-- File previews will be added here dynamically -->
-          </div>
-
-          <!-- Progress Bar -->
-          <div id="progressContainer" class="hidden">
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-              <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="ageGroup" class="block text-gray-700 mb-2">🎂বয়সের গ্রুপ (ঐচ্ছিক)</label>
+                <select id="ageGroup" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 optimized-animation">
+                  <option value="" selected>নির্বাচন করুন</option>
+                  <option value="<12">১২ বছরের কম</option>
+                  <option value="13-18">১৩-১৮ বছর</option>
+                  <option value="19-24">১৯-২৪ বছর</option>
+                  <option value="25-30">২৫-৩০ বছর</option>
+                  <option value="31-50">৩১-৫০ বছর</option>
+                  <option value="50+">৫০+ বছর</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="gender" class="block text-gray-700 mb-2">🚻লিঙ্গ (ঐচ্ছিক)</label>
+                <select id="gender" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 optimized-animation">
+                  <option value="" selected>নির্বাচন করুন</option>
+                  <option value="Male">পুরুষ</option>
+                  <option value="Female">মহিলা</option>
+                  <option value="Other">অন্যান্য</option>
+                  <option value="Prefer not to say">উত্তর দিতে চাই না</option>
+                </select>
+              </div>
             </div>
-            <p id="progressText" class="text-right text-sm text-gray-500 mt-2">0%</p>
-          </div>
-
-          <!-- Submit Button -->
-          <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-2xl font-semibold hover:bg-indigo-700 transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-            </svg>
-            আপলোড করুন
-          </button>
-        </form>
+            
+            <div id="dropZone" class="unified-dropzone" 
+                tabindex="0" role="button" aria-label="ফাইল আপলোডের জন্য ড্রপ জোন, এখানে ক্লিক করুন বা ফাইল ড্রপ করুন">
+              <div class="mb-4 text-indigo-500">
+                <i class="fas fa-cloud-upload-alt text-4xl" aria-hidden="true"></i>
+              </div>
+              <p class="mb-2 text-gray-700 font-medium">ফাইল এখানে ড্রপ করুন</p>
+              <p class="mb-4 text-gray-500 text-sm">অথবা</p>
+              
+              <div class="flex flex-col sm:flex-row justify-center gap-4 mobile-stack">
+                <label for="cameraInput" class="unified-button">
+                  <i class="fas fa-camera mr-2" aria-hidden="true"></i> ক্যামেরা থেকে তোলেন
+                  <input type="file" accept="image/*" capture="environment" class="hidden" id="cameraInput">
+                </label>
+                
+                <label for="galleryInput" class="unified-button">
+                  <i class="fas fa-image mr-2" aria-hidden="true"></i> গ্যালারি থেকে নির্বাচন করুন
+                  <input type="file" accept="image/*" class="hidden" id="galleryInput" multiple>
+                </label>
+              </div>
+              
+              <p class="mt-4 text-gray-500 text-sm">সর্বোচ্চ ১০টি ছবি আপলোড করতে পারবেন (JPG, PNG, সর্বোচ্চ ৫MB)</p>
+            </div>
+            
+            <div id="filePreviewsContainer" class="hidden">
+              <h3 class="text-lg font-semibold mb-3 text-indigo-700">নির্বাচিত ছবিসমূহ:</h3>
+              <div id="filePreviews" class="file-previews-container grid grid-cols-2 md:grid-cols-3 gap-4 p-2 border border-gray-200 rounded-lg max-h-64 overflow-y-auto">
+              </div>
+              <p id="fileCount" class="text-sm text-gray-500 mt-2 text-right">মোট নির্বাচিত ফাইল: <span>0</span>/10</p>
+            </div>
+            
+            <!-- Improved Privacy Consent Section -->
+            <div class="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-100 transition-all duration-300 hover:border-indigo-300 hover:shadow-sm">
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <input 
+                    type="checkbox" 
+                    id="privacyConsent" 
+                    class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 focus:ring-2 transition-all duration-200"
+                    required
+                  >
+                </div>
+                <div class="ml-3 text-sm">
+                  <label for="privacyConsent" class="font-medium text-gray-700 cursor-pointer select-none">
+                    <div class="flex items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                      </svg>
+                      <span class="leading-relaxed">
+                        আমি সম্মতি দিচ্ছি যে আমার আপলোড করা ডেটা পাবলিক ডেটাসেটে অন্তর্ভুক্ত হতে পারে এবং গবেষণার কাজে ব্যবহৃত হবে।
+                      </span>
+                    </div>
+                  </label>
+                  <p class="mt-2 text-xs text-gray-500 ml-7">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    আপনার ডেটা গবেষণা উদ্দেশ্যে ব্যবহৃত হবে এবং কোনো ব্যক্তিগত তথ্য সংরক্ষণ করা হবে না।
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div id="privacyError" class="error-message hidden">
+              <i class="fas fa-exclamation-circle"></i> আপনাকে এই শর্তে সম্মতি দিতে হবে
+            </div>
+            
+            <div id="progressContainer" class="hidden">
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 optimized-animation" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-between items-center mt-2">
+                <p id="progressText" class="text-sm text-gray-500">0%</p>
+                <p id="uploadStatus" class="text-sm text-gray-500">প্রস্তুত...</p>
+              </div>
+            </div>
+            
+            <button type="submit" class="w-full unified-button flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed" id="submitButton" disabled>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span id="submitButtonText">আপলোড করুন</span>
+              <div id="submitButtonLoader" class="loader ease-linear rounded-full border-2 border-t-2 border-gray-200 h-4 w-4 ml-2 hidden"></div>
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <!-- How it Works Section -->
-  <section class="py-16 bg-gray-100">
-    <div class="container mx-auto px-6">
-      <h2 class="text-3xl font-bold text-center text-indigo-700 mb-12">কিভাবে কাজ করে?</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover">
-          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="text-2xl text-indigo-600">1</span>
-          </div>
-          <h3 class="text-xl font-semibold mb-3">আপলোড করুন</h3>
-          <p class="text-gray-600">আপনার বাংলা হাতের লেখার ছবি আপলোড করুন। ক্যামেরা দিয়ে সরাসরি তুলে দিতে পারেন বা গ্যালারি থেকে নির্বাচন করতে পারেন।</p>
-        </div>
+    </section>
+    
+    <section class="py-16 bg-gray-100">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center text-indigo-700 mb-12">কিভাবে কাজ করে?</h2>
         
-        <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover">
-          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="text-2xl text-indigo-600">2</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover optimized-animation">
+            <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl text-indigo-600" aria-hidden="true">1</span>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">আপলোড করুন</h3>
+            <p class="text-gray-600">আপনার বাংলা হাতের লেখার ছবি আপলোড করুন। ক্যামেরা দিয়ে সরাসরি তুলে দিতে পারেন বা গ্যালারি থেকে নির্বাচন করতে পারেন।</p>
           </div>
-          <h3 class="text-xl font-semibold mb-3">ডেটা প্রসেসিং</h3>
-          <p class="text-gray-600">আমাদের সিস্টেম আপনার ছবি বিশ্লেষণ করে এবং বাংলা টেক্সট চিনতে AI মডেলকে প্রশিক্ষণ দিতে এই ডেটা ব্যবহার করে।</p>
-        </div>
-        
-        <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover">
-          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="text-2xl text-indigo-600">3</span>
+          
+          <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover optimized-animation">
+            <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl text-indigo-600" aria-hidden="true">2</span>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">ডেটা প্রসেসিং</h3>
+            <p class="text-gray-600">আমাদের সিস্টেম আপনার ছবি বিশ্লেষণ করে এবং বাংলা টেক্সট চিনতে AI মডেলকে প্রশিক্ষণ দিতে এই ডেটা ব্যবহার করে।</p>
           </div>
-          <h3 class="text-xl font-semibold mb-3">মডেল উন্নয়ন</h3>
-          <p class="text-gray-600">আপনার অবদান বাংলা OCR মডেলকে আরও সঠিক এবং কার্যকর করতে সাহায্য করে, যা বাংলা ভাষার ডিজিটাল রূপান্তরকে ত্বরান্বিত করে।</p>
+          
+          <div class="bg-white p-6 rounded-2xl shadow-md text-center card-hover optimized-animation">
+            <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl text-indigo-600" aria-hidden="true">3</span>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">মডেল উন্নয়ন</h3>
+            <p class="text-gray-600">আপনার অবদান বাংলা OCR মডেলকে আরও সঠিক এবং কার্যকর করতে সাহায্য করে, যা বাংলা ভাষার ডিজিটাল রূপান্তরকে ত্বরান্বিত করে।</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="py-16">
-    <div class="container mx-auto px-6 max-w-4xl">
-      <h2 class="text-3xl font-bold text-center text-indigo-700 mb-10">প্রজেক্ট সম্পর্কে</h2>
-      <p class="text-lg text-gray-700 leading-relaxed mb-6">
-        বাংলা হাতে লেখা টেক্সট শনাক্তকরণ (OCR) একটি বড় চ্যালেঞ্জ। আমাদের লক্ষ্য একটি আধুনিক ডেটাসেট তৈরি করা, যাতে ভবিষ্যতে AI মডেলগুলো আরো নির্ভুলভাবে বাংলা লেখা চিনতে পারে। আপনার অবদান এই প্রজেক্টকে সফল করতে সাহায্য করবে।
-      </p>
-      <p class="text-lg text-gray-700 leading-relaxed">
-        এই প্রজেক্টটি সম্পূর্ণ ওপেন সোর্স এবং গবেষণার উদ্দেশ্যে তৈরি। আপনার আপলোড করা সকল ডেটা পাবলিকভাবে হবে এবং শুধুমাত্র গবেষণার কাজে ব্যবহৃত হবে। আপনার গোপনীয়তা রক্ষায় আমরা সংবেদনশীল তথ্য আপলোড না করার অনুরোধ করছি।
-      </p>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section class="py-16 bg-gray-100">
-    <div class="container mx-auto px-6 max-w-4xl">
-      <h2 class="text-3xl font-bold text-center text-indigo-700 mb-10">সচরাচর জিজ্ঞাসিত প্রশ্ন</h2>
-      
-      <div class="space-y-4">
-        <div class="bg-white rounded-2xl p-6 shadow-md card-hover">
-          <h3 class="text-xl font-semibold mb-2 text-indigo-600">কোন ধরনের ছবি আপলোড করা যাবে?</h3>
-          <p class="text-gray-700">স্পষ্ট এবং পড়া যাবে এমন বাংলা হাতের লেখার যেকোনো ছবি আপলোড করতে পারেন। JPG, PNG ফরম্যাটের ছবি নেয়া হয়।</p>
-        </div>
+    </section>
+    
+    <section class="py-16">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-3xl font-bold text-center text-indigo-700 mb-10">প্রজেক্ট সম্পর্কে</h2>
+        <p class="text-lg text-gray-700 leading-relaxed mb-6">
+          বাংলা হাতে লেখা টেক্সট শনাক্তকরণ (OCR) একটি বড় চ্যালেঞ্জ। আমাদের লক্ষ্য একটি আধুনিক ডেটাসেট তৈরি করা, যাতে ভবিষ্যতে AI মডেলগুলো আরও নির্ভুলভাবে বাংলা লেখা চিনতে পারে। আপনার অবদান এই প্রজেক্টকে সফল করতে সাহায্য করবে।
+        </p>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          এই প্রজেক্টটি সম্পূর্ণ ওপেন সোর্স এবং গবেষণার উদ্দেশ্যে তৈরি। আপনার আপলোড করা সকল ডেটা পাবলিকভাবে উপলব্ধ হবে এবং শুধুমাত্র গবেষণার কাজে ব্যবহৃত হবে। আপনার গোপনীয়তা রক্ষায় আমরা সংবেদনশীল তথ্য আপলোড না করার অনুরোধ করছি।
+        </p>
+      </div>
+    </section>
+    
+    <section class="py-16 bg-gray-100">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-3xl font-bold text-center text-indigo-700 mb-10">সচরাচর জিজ্ঞাসিত প্রশ্ন</h2>
         
-        <div class="bg-white rounded-2xl p-6 shadow-md card-hover">
-          <h3 class="text-xl font-semibold mb-2 text-indigo-600">আমার ডেটা কীভাবে ব্যবহার করা হবে?</h3>
-          <p class="text-gray-700">আপনার আপলোড করা ছবিগুলো একটি পাবলিক ডেটাসেটে যুক্ত হবে এবং বাংলা OCR সিস্টেম উন্নত করতে গবেষকরা ব্যবহার করবেন।</p>
-        </div>
-        
-        <div class="bg-white rounded-2xl p-6 shadow-md card-hover">
-          <h3 class="text-xl font-semibold mb-2 text-indigo-600">আমি কি আমার আপলোড করা ডেটা মুছে ফেলতে পারব?</h3>
-          <p class="text-gray-700">ডেটা আপলোড হয়ে গেলে এবং গবেষণায় ব্যবহার শুরু হলে তা সরিয়ে ফেলা কঠিন। তাই আপলোডের সময় নিশ্চিত হয়ে নিন।</p>
+        <div class="space-y-4">
+          <div class="bg-white rounded-2xl p-6 shadow-md card-hover optimized-animation">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-600">কোন ধরনের ছবি আপলোড করা যাবে?</h3>
+            <p class="text-gray-700">স্পষ্ট এবং পড়া যাবে এমন বাংলা হাতের লেখার যেকোনো ছবি আপলোড করতে পারেন। JPG, PNG ফরম্যাটের ছবি নেয়া হয়। প্রতিটি ফাইলের আকার ৫MB এর কম হতে হবে।</p>
+          </div>
+          
+          <div class="bg-white rounded-2xl p-6 shadow-md card-hover optimized-animation">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-600">আমার ডেটা কীভাবে ব্যবহার করা হবে?</h3>
+            <p class="text-gray-700">আপনার আপলোড করা ছবিগুলো একটি পাবলিক ডেটাসেটে যুক্ত হবে এবং বাংলা OCR সিস্টেম উন্নত করতে গবেষকরা ব্যবহার করবেন।</p>
+          </div>
+          
+          <div class="bg-white rounded-2xl p-6 shadow-md card-hover optimized-animation">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-600">আমি কি আমার আপলোড করা ডেটা মুছে ফেলতে পারব?</h3>
+            <p class="text-gray-700">ডেটা আপলোড হয়ে গেলে এবং গবেষণায় ব্যবহার শুরু হলে তা সরিয়ে ফেলা কঠিন। তাই আপলোডের আগে নিশ্চিত হয়ে নিন।</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-indigo-700 text-white py-10">
+    </section>
+  </main>
+  
+  <footer class="bg-indigo-700 text-white py-10" role="contentinfo">
     <div class="container mx-auto px-6">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-6 md:mb-0">
@@ -284,14 +773,14 @@
         </div>
         
         <div class="flex space-x-4">
-          <a href="https://github.com/RifatxRahman" class="text-white hover:text-indigo-200 transition">
-            <i class="fab fa-github text-2xl"></i>
+          <a href="#" class="text-white hover:text-indigo-200 transition touch-button optimized-animation" aria-label="GitHub">
+            <i class="fab fa-github text-2xl" aria-hidden="true"></i>
           </a>
-          <a href="#" class="text-white hover:text-indigo-200 transition">
-            <i class="fab fa-twitter text-2xl"></i>
+          <a href="#" class="text-white hover:text-indigo-200 transition touch-button optimized-animation" aria-label="Twitter">
+            <i class="fab fa-twitter text-2xl" aria-hidden="true"></i>
           </a>
-          <a href="#" class="text-white hover:text-indigo-200 transition">
-            <i class="fab fa-facebook text-2xl"></i>
+          <a href="#" class="text-white hover:text-indigo-200 transition touch-button optimized-animation" aria-label="Facebook">
+            <i class="fab fa-facebook text-2xl" aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -302,19 +791,82 @@
       </div>
     </div>
   </footer>
-
+  
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Main page functionality
       const dropZone = document.getElementById('dropZone');
       const cameraInput = document.getElementById('cameraInput');
       const galleryInput = document.getElementById('galleryInput');
+      const filePreviewsContainer = document.getElementById('filePreviewsContainer');
       const filePreviews = document.getElementById('filePreviews');
+      const fileCount = document.getElementById('fileCount').querySelector('span');
       const progressContainer = document.getElementById('progressContainer');
       const progressBar = document.getElementById('progressBar');
       const progressText = document.getElementById('progressText');
+      const uploadStatus = document.getElementById('uploadStatus');
       const form = document.getElementById('uploadForm');
       const toastSuccess = document.getElementById('toastSuccess');
       const toastError = document.getElementById('toastError');
+      const toastWarning = document.getElementById('toastWarning');
+      const generateNewTextBtn = document.getElementById('generateNewText');
+      const textToWrite = document.getElementById('textToWrite');
+      const privacyConsent = document.getElementById('privacyConsent');
+      const privacyError = document.getElementById('privacyError');
+      const submitButton = document.getElementById('submitButton');
+      const submitButtonText = document.getElementById('submitButtonText');
+      const submitButtonLoader = document.getElementById('submitButtonLoader');
+      const textHint = document.getElementById('textHint');
+      
+      // State management
+      let uploadedFiles = [];
+      let isUploading = false;
+      const MAX_FILES = 10;
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      
+      // Bengali sentences for labeling
+      const bengaliSentences = [
+        "বাংলা ভাষা বিশ্বের অন্যতম সুন্দর একটি ভাষা।",
+        "আমার সোনার বাংলা, আমি তোমায় ভালোবাসি।",
+        "জ্ঞান অর্জনের জন্য বই পড়া অপরিহার্য।",
+        "প্রযুক্তির দ্রুত উন্নয়নে জীবনযাত্রা সহজ হয়েছে।",
+        "মানুষের সৃজনশীলতা সভ্যতার চালিকা শক্তি।",
+        "বাংলা সাহিত্যের ইতিহাস হাজার বছরের পুরনো।",
+        "ডিজিটাল বাংলাদেশ গড়তে সবার সহযোগিতা প্রয়োজন।",
+        "অন্ধকার থেকে আলোয় আসার পথ হলো শিক্ষা।",
+        "প্রতিটি মানুষের জীবনে ভাষার গুরুত্ব অপরিসীম।",
+        "ঐক্যবদ্ধ হয়ে কাজ করলে সাফল্য নিশ্চিত।"
+      ];
+      
+      // Show hint on text section hover
+      const textSection = document.querySelector('.bg-indigo-50');
+      textSection.addEventListener('mouseenter', function() {
+        textHint.classList.add('show');
+      });
+      
+      textSection.addEventListener('mouseleave', function() {
+        textHint.classList.remove('show');
+      });
+      
+      // Set random Bengali text
+      function setRandomText() {
+        const randomIndex = Math.floor(Math.random() * bengaliSentences.length);
+        textToWrite.textContent = bengaliSentences[randomIndex];
+        // Save to localStorage
+        localStorage.setItem('currentText', bengaliSentences[randomIndex]);
+      }
+      
+      // Check if there's a saved text in localStorage
+      const savedText = localStorage.getItem('currentText');
+      if (savedText) {
+        textToWrite.textContent = savedText;
+      } else {
+        // Initialize with a random text
+        setRandomText();
+      }
+      
+      // Generate new text on button click
+      generateNewTextBtn.addEventListener('click', setRandomText);
       
       // Handle drag and drop
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -336,12 +888,17 @@
       
       function highlight() {
         dropZone.classList.add('drag-over');
+        // Add haptic feedback on supported devices
+        if ('vibrate' in navigator) {
+          navigator.vibrate(50);
+        }
       }
       
       function unhighlight() {
         dropZone.classList.remove('drag-over');
       }
       
+      // Handle file drop
       dropZone.addEventListener('drop', handleDrop, false);
       
       function handleDrop(e) {
@@ -350,126 +907,295 @@
         handleFiles(files);
       }
       
-      // Handle file selection from buttons
-      cameraInput.addEventListener('change', function() {
-        handleFiles(this.files);
+      // Handle camera input
+      cameraInput.addEventListener('change', function(e) {
+        handleFiles(e.target.files);
       });
       
-      galleryInput.addEventListener('change', function() {
-        handleFiles(this.files);
+      // Handle gallery input
+      galleryInput.addEventListener('change', function(e) {
+        handleFiles(e.target.files);
       });
       
+      // Process selected files
       function handleFiles(files) {
-        if (files.length > 0) {
-          filePreviews.classList.remove('hidden');
+        // Check if any files were selected
+        if (files.length === 0) {
+          showToast('warning', 'কোনো ফাইল নির্বাচন করা হয়নি');
+          return;
+        }
+        
+        if (uploadedFiles.length + files.length > MAX_FILES) {
+          showToast('error', `আপনি সর্বোচ্চ ${MAX_FILES}টি ফাইল আপলোড করতে পারবেন`);
+          return;
+        }
+        
+        // Process each file individually
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
           
-          for (let i = 0; i < Math.min(files.length, 10); i++) {
-            const file = files[i];
-            if (file.type.match('image.*')) {
-              const reader = new FileReader();
-              
-              reader.onload = function(e) {
-                const preview = document.createElement('div');
-                preview.className = 'file-preview relative';
-                preview.innerHTML = `
-                  <img src="${e.target.result}" class="rounded-lg object-cover h-32 w-full" />
-                  <button type="button" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
-                    &times;
-                  </button>
-                `;
-                
-                preview.querySelector('button').addEventListener('click', function() {
-                  preview.remove();
-                  if (filePreviews.children.length === 0) {
-                    filePreviews.classList.add('hidden');
-                  }
-                });
-                
-                filePreviews.appendChild(preview);
+          // Check file type
+          if (!file.type.match('image.*')) {
+            showToast('error', 'শুধুমাত্র ছবি ফাইল আপলোড করা যাবে');
+            continue;
+          }
+          
+          // Check file size
+          if (file.size > MAX_FILE_SIZE) {
+            showToast('error', `${file.name} ফাইলের আকার ৫MB এর বেশি হতে পারবে না`);
+            continue;
+          }
+          
+          // Add to uploaded files
+          uploadedFiles.push(file);
+          
+          // Create preview
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const preview = document.createElement('div');
+            preview.className = 'file-preview relative';
+            
+            // Add processing indicator
+            const processingIndicator = document.createElement('div');
+            processingIndicator.className = 'processing-indicator';
+            processingIndicator.innerHTML = '<div class="processing-spinner"></div>';
+            preview.appendChild(processingIndicator);
+            
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = `Preview of ${file.name}`;
+            img.className = 'lazy-load optimized-image';
+            img.loading = 'lazy';
+            
+            // Remove processing indicator when image loads
+            img.onload = function() {
+              processingIndicator.remove();
+            };
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 touch-button';
+            removeBtn.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
+            removeBtn.setAttribute('aria-label', 'ফাইল সরান');
+            removeBtn.addEventListener('click', function() {
+              const index = uploadedFiles.indexOf(file);
+              if (index > -1) {
+                uploadedFiles.splice(index, 1);
               }
-              
-              reader.readAsDataURL(file);
+              preview.remove();
+              updateFileCount();
+            });
+            
+            preview.appendChild(img);
+            preview.appendChild(removeBtn);
+            
+            // Append preview to container
+            filePreviews.appendChild(preview);
+            
+            // Lazy load image
+            setTimeout(() => {
+              img.classList.add('loaded');
+            }, 100);
+            
+            // Update file count after each file is added
+            updateFileCount();
+          };
+          
+          reader.onerror = function() {
+            showToast('error', `Failed to read ${file.name}`);
+            // Remove the file from uploadedFiles since we couldn't read it
+            const index = uploadedFiles.indexOf(file);
+            if (index > -1) {
+              uploadedFiles.splice(index, 1);
             }
+            updateFileCount();
+          };
+          
+          reader.readAsDataURL(file);
+        }
+      }
+      
+      // Update file count display and button state
+      function updateFileCount() {
+        fileCount.textContent = uploadedFiles.length;
+        
+        if (uploadedFiles.length > 0) {
+          filePreviewsContainer.classList.remove('hidden');
+          // Only enable the button if we're not currently uploading
+          if (!isUploading) {
+            submitButton.disabled = false;
+            submitButtonText.textContent = 'আপলোড করুন';
+          }
+        } else {
+          filePreviewsContainer.classList.add('hidden');
+          // Only disable the button if we're not currently uploading
+          if (!isUploading) {
+            submitButton.disabled = true;
+            submitButtonText.textContent = 'আপলোড করুন';
           }
         }
-      }
-      
-      // Show toast notification
-      function showToast(toastElement, message) {
-        if (message) {
-          toastElement.querySelector('span').textContent = message;
-        }
-        toastElement.classList.add('show');
-        setTimeout(() => {
-          toastElement.classList.remove('show');
-        }, 5000);
-      }
-      
-      // Form validation
-      function validateForm() {
-        const fileCount = filePreviews.children.length;
-        if (fileCount === 0) {
-          showToast(toastError, 'ত্রুটি: দয়া করে একটি ছবি আপলোড করুন');
-          return false;
-        }
-        
-        if (fileCount > 10) {
-          showToast(toastError, 'ত্রুটি: আপনি 10টি ছবি আপলোড করতে পারেন');
-          return false;
-        }
-        
-        return true;
       }
       
       // Form submission
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        if (!validateForm()) {
+        // Validate privacy consent
+        if (!privacyConsent.checked) {
+          privacyError.classList.remove('hidden');
+          privacyConsent.classList.add('input-error');
+          showToast('error', 'আপনাকে গোপনীয়তা নীতি মেনে নিতে হবে');
+          return;
+        } else {
+          privacyError.classList.add('hidden');
+          privacyConsent.classList.remove('input-error');
+        }
+        
+        // Validate at least one file
+        if (uploadedFiles.length === 0) {
+          showToast('error', 'কমপক্ষে একটি ছবি আপলোড করুন');
           return;
         }
         
-        // Collect form data
-        const formData = {
-          writingStyle: document.getElementById('writingStyle').value,
-          handPreference: document.getElementById('handPreference').value,
-          ageGroup: document.getElementById('ageGroup').value,
-          gender: document.getElementById('gender').value,
-          files: filePreviews.children.length
-        };
+        // Set uploading state
+        isUploading = true;
         
-        console.log('Form data:', formData);
+        // Disable submit button and show loading
+        submitButton.disabled = true;
+        submitButtonText.textContent = 'আপলোড হচ্ছে...';
+        submitButtonLoader.classList.remove('hidden');
+        
+        // Show progress container
+        progressContainer.classList.remove('hidden');
         
         // Simulate upload progress
-        progressContainer.classList.remove('hidden');
-        let width = 0;
+        let progress = 0;
         const interval = setInterval(function() {
-          if (width >= 100) {
+          progress += 5;
+          if (progress >= 100) {
             clearInterval(interval);
+            progress = 100;
+            uploadStatus.textContent = 'আপলোড সম্পূর্ণ!';
             
-            // Redirect to thank you page with data as URL parameters
-            const params = new URLSearchParams();
-            params.append('files', formData.files);
-            if (formData.writingStyle) params.append('writingStyle', formData.writingStyle);
-            if (formData.handPreference) params.append('handPreference', formData.handPreference);
-            if (formData.ageGroup) params.append('ageGroup', formData.ageGroup);
-            if (formData.gender) params.append('gender', formData.gender);
+            // Show success message
+            showToast('success', 'আপনার ফাইল সফলভাবে আপলোড হয়েছে!');
             
-            window.location.href = 'thankyou.html?' + params.toString();
-          } else {
-            width += 5;
-            progressBar.style.width = width + '%';
-            progressText.textContent = width + '%';
+            // Prepare data for thank you page
+            const formData = {
+              fileCount: uploadedFiles.length,
+              writingStyle: document.getElementById('writingStyle').value,
+              handPreference: document.getElementById('handPreference').value,
+              ageGroup: document.getElementById('ageGroup').value,
+              gender: document.getElementById('gender').value,
+              text: textToWrite.textContent
+            };
+            
+            // Reset form after 2 seconds and redirect
+            setTimeout(() => {
+              resetForm();
+              // Redirect to thank you page with form data as query parameters
+              const params = new URLSearchParams();
+              params.append('files', formData.fileCount);
+              if (formData.writingStyle) params.append('writingStyle', formData.writingStyle);
+              if (formData.handPreference) params.append('handPreference', formData.handPreference);
+              if (formData.ageGroup) params.append('ageGroup', formData.ageGroup);
+              if (formData.gender) params.append('gender', formData.gender);
+              if (formData.text) params.append('text', encodeURIComponent(formData.text));
+              
+              window.location.href = `thankyou.html?${params.toString()}`;
+            }, 2000);
           }
-        }, 200);
+          
+          progressBar.style.width = `${progress}%`;
+          progressText.textContent = `${progress}%`;
+          
+          // Enhanced loading status messages
+          if (progress < 30) {
+            uploadStatus.textContent = 'ফাইল আপলোড হচ্ছে...';
+          } else if (progress < 60) {
+            uploadStatus.textContent = 'ডেটা প্রক্রিয়া করা হচ্ছে...';
+          } else if (progress < 90) {
+            uploadStatus.textContent = 'সার্ভারে সংরক্ষণ করা হচ্ছে...';
+          } else {
+            uploadStatus.textContent = 'প্রায় সম্পন্ন...';
+          }
+        }, 100);
       });
+      
+      // Reset form
+      function resetForm() {
+        uploadedFiles = [];
+        filePreviews.innerHTML = '';
+        updateFileCount();
+        privacyConsent.checked = false;
+        progressContainer.classList.add('hidden');
+        submitButtonText.textContent = 'আপলোড করুন';
+        submitButtonLoader.classList.add('hidden');
+        isUploading = false; // Reset uploading state
+      }
+      
+      // Show toast notification
+      function showToast(type, message) {
+        let toastElement;
+        
+        switch(type) {
+          case 'success':
+            toastElement = toastSuccess;
+            document.getElementById('toastSuccessMessage').textContent = message;
+            break;
+          case 'error':
+            toastElement = toastError;
+            document.getElementById('toastErrorMessage').textContent = message;
+            break;
+          case 'warning':
+            toastElement = toastWarning;
+            document.getElementById('toastWarningMessage').textContent = message;
+            break;
+        }
+        
+        toastElement.classList.add('show');
+        
+        // Hide after 5 seconds
+        setTimeout(() => {
+          toastElement.classList.remove('show');
+        }, 5000);
+      }
+      
+      // Lazy loading for images
+      if ('IntersectionObserver' in window) {
+        const lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              const lazyImage = entry.target;
+              lazyImage.classList.add('loaded');
+              lazyImageObserver.unobserve(lazyImage);
+            }
+          });
+        });
+        
+        document.querySelectorAll('.lazy-load').forEach(function(lazyImage) {
+          lazyImageObserver.observe(lazyImage);
+        });
+      }
+      
+      // Add keyboard support for drop zone
+      dropZone.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          galleryInput.click();
+        }
+      });
+      
+      // Add keyboard navigation for file previews
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Delete' && document.activeElement.classList.contains('file-preview')) {
+          const removeBtn = document.activeElement.querySelector('button');
+          if (removeBtn) removeBtn.click();
+        }
+      });
+      
+      // Initialize the button state when DOM is loaded
+      submitButton.disabled = true;
     });
   </script>
-
 </body>
-
 </html>
-
-
-
-
